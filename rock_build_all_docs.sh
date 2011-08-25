@@ -14,6 +14,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
     fi
 
     for flavor_dir in $workspace_dir/$SRC_DIR_FLAVOR_PREFIX/*; do
+	echo
 	flavor_name=`basename $flavor_dir`
 	path=$flavor_dir/$SRC_DIR_SUFFIX
 	if ! test -f $path/dev/successful; then
@@ -22,18 +23,25 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	fi
 
         set +e
+	if test -f $path/docgen.stamp && test $path/docgen.stamp -nt $path/dev/successful; then
+	    echo "build of $workspace_name:$flavor_name did not get updated since last time. Skipping ..."
+	    continue
+	fi
+
 	echo "generating documentation for $workspace_name:$flavor_name"
 	( set -e
-          rm -rf $path/doc
+          rm -rf $path/doc $path/docgen*
 	  cd $path/dev
 	  . ./env.sh
 	  gem install webgen coderay --no-rdoc --no-ri
 	  rock-make-doc $PWD/../doc
-	) > ../docgen.txt 2>&1
+	) > $path/docgen.txt 2>&1
 	if test "$?" -ne "0"; then
 	    echo "generation failed for $workspace_name:$flavor_name"
 	    echo "log in $path/docgen.txt"
 	    result=1
+	else
+	    touch $path/docgen.stamp
 	fi
 	set -e
     done
