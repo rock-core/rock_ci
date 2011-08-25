@@ -1,0 +1,15 @@
+ROCK_FLAVOR: master
+GITORIOUS: git
+GITORIOUS_ROOT: git://gitorious.org
+GITORIOUS_PUSH_ROOT: "git@gitorious.org:"
+SPACEGIT: git
+SPACEGIT_ROOT: git://spacegit.dfki.uni-bremen.de
+SPACEGIT_PUSH_ROOT: "git@spacegit.dfki.uni-bremen.de:"
+rtt_target: gnulinux
+rtt_corba_implementation: omniorb
+osdeps_mode: all
+USE_OCL: false
+FAMOS_SYSTEM_ID: '1'
+FAMOS_SYSTEM_TYPE: 'sherpa'
+BASE_LOG_LEVEL: 'DEBUG'
+
