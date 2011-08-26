@@ -46,5 +46,5 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	set -e
     done
 done
-exit 1
+exit $result
 
