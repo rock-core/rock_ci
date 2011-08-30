@@ -4,6 +4,7 @@ SRC_DIR_WORKSPACE_PREFIX=/home/build/jenkins/workspace
 SRC_DIR_FLAVOR_PREFIX=FLAVOR
 SRC_DIR_SUFFIX=label/DebianUnstable
 LOG_DIR=/home/build/logs
+sudo apt-get install doxygen
 
 mkdir -p $LOG_DIR
 result=0
