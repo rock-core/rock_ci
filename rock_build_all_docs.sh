@@ -38,6 +38,9 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           rm -rf $path/doc $path/docgen*
 	  cd $path/dev
 	  . ./env.sh
+          export PATH=/home/build/rock_admin_scripts/bin:$PATH
+          export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
+
 	  gem install webgen coderay --no-rdoc --no-ri
 	  rock-make-doc $PWD/../doc
 	) > $path/docgen.txt 2>&1
