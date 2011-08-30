@@ -42,7 +42,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
 
 	  gem install webgen coderay --no-rdoc --no-ri
-	  rock-make-doc $PWD/../doc
+	  rock-make-doc --status=master:next $PWD/../doc
 	) > $path/docgen.txt 2>&1
 	if test "$?" -ne "0"; then
 	    echo "generation failed for $workspace_name:$flavor_name"
