@@ -23,6 +23,10 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	fi
 
         set +e
+        if test "$FORCE_DOC_GEN" = "1"; then
+            rm -f $path/docgen.stamp
+        fi
+
 	if test -f $path/docgen.stamp && test $path/docgen.stamp -nt $path/dev/successful; then
 	    echo "build of $workspace_name:$flavor_name did not get updated since last time. Skipping ..."
 	    continue
