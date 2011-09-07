@@ -7,9 +7,18 @@ CONFIG_DIR=/home/build/slave_conf
 
 job_basename=`dirname $JOB_NAME`
 if test -f $CONFIG_DIR/$job_basename-$FLAVOR.yml; then
-  $SHELL rock-build-server "$@" $CONFIG_DIR/$job_basename-$FLAVOR.yml
+  configfile=$CONFIG_DIR/$job_basename-$FLAVOR.yml
 else
-  $SHELL rock-build-server "$@" $CONFIG_DIR/default-$FLAVOR.yml
+  configfile=$CONFIG_DIR/default-$FLAVOR.yml
 fi
+
+if test -d dev && test -f dev/successful; then
+  echo "last build was successful, doing a full build"
+  $SHELL rock-build-server "$@"  $configfile
+else
+  echo "last build was unsuccessful, doing an incremental build"
+  $SHELL rock-build-incremental "$@"  $configfile
+fi
+
 touch dev/successful
 
