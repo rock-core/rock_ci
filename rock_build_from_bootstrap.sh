@@ -14,10 +14,10 @@ fi
 
 if test -d dev && test -f dev/successful; then
   echo "last build was successful, doing a full build"
-  $SHELL rock-build-server "$@"  $configfile
+  $SHELL -ex rock-build-server "$@"  $configfile
 else
   echo "last build was unsuccessful, doing an incremental build"
-  $SHELL rock-build-incremental "$@"  $configfile
+  $SHELL -ex rock-build-incremental "$@"  $configfile
 fi
 
 touch dev/successful
