@@ -1,6 +1,6 @@
 #! /bin/sh -ex
 
-if test -z "DONE_SLAVE_CONF"; then
+if test -z "$DONE_SLAVE_CONF"; then
     cd /home/build/slave_conf
     git remote update
     git reset --hard origin/master
