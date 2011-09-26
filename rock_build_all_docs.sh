@@ -34,8 +34,8 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	fi
 
 	echo "generating documentation for $workspace_name:$flavor_name"
+        rm -rf $path/doc $path/docgen*
 	( set -e
-          rm -rf $path/doc $path/docgen*
 	  cd $path/dev
 	  . ./env.sh
           export PATH=/home/build/rock_admin_scripts/bin:$PATH
