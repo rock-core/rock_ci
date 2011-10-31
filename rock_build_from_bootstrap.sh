@@ -49,6 +49,7 @@ if test "x$DOCGEN" = "xtrue"; then
       export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
 
       gem install webgen coderay --no-rdoc --no-ri
+      rm -rf doc
       rock-make-doc --status=master:next,next:stable $PWD/../doc
     ) 2>&1 | tee docgen.txt
     touch dev/doc-successful
