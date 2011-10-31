@@ -13,11 +13,11 @@ else
 fi
 
 do_incremental=1
-if test "x$INCREMENTAL" = "x1"; then
+if test "x$INCREMENTAL" = "xtrue"; then
     echo "INCREMENTAL is set, doing an incremental build"
 elif test -d dev && ! test -f dev/successful; then
     echo "last build was unsuccessful, doing an incremental build"
-elif test "x$SKIP_SUCCESSFUL" = "x1" && test -d dev && test -f dev/successful; then
+elif test "x$SKIP_SUCCESSFUL" = "xtrue" && test -d dev && test -f dev/successful; then
     echo "last build was successful and SKIP_SUCCESSFUL is set, doing nothing"
     exit 0
 else
@@ -39,7 +39,7 @@ fi
 
 touch dev/successful
 
-if test "x$CLEAN_IF_SUCCESSFUL" = "x1"; then
+if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
     rm -rf dev/install
     find dev -type d -name build -delete
     touch dev/cleaned
