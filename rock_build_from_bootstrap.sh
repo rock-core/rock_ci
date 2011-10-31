@@ -25,6 +25,11 @@ else
     do_incremental=0
 fi
 
+if test "x$do_incremental" = "x1" && test -f dev/cleaned; then
+    echo "this is an incremental build, but the last build got cleaned, doing nothing"
+    exit 0
+fi
+
 rm -f dev/cleaned
 if test "x$do_incremental" = "x1"; then
   $SHELL -ex rock-build-incremental "$@"  $configfile
