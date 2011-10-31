@@ -17,6 +17,9 @@ if test "x$INCREMENTAL" = "x1"; then
     echo "INCREMENTAL is set, doing an incremental build"
 elif test -d dev && ! test -f dev/successful; then
     echo "last build was unsuccessful, doing an incremental build"
+elif test "x$SKIP_SUCCESSFUL" = "x1" && test -d dev && test -f dev/successful; then
+    echo "last build was successful and SKIP_SUCCESSFUL is set, doing nothing"
+    exit 0
 else
     echo "doing a full build"
     do_incremental=0
