@@ -41,7 +41,7 @@ else
 fi
 touch dev/successful
 mkdir -p logs
-cp -r dev/install/log logs/`date %F-%H%M%S`
+cp -r dev/install/log logs/`date +%F-%H%M%S`
 
 if test "x$DOCGEN" = "xtrue"; then
     ( set -e
