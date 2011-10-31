@@ -42,7 +42,7 @@ fi
 touch dev/successful
 
 if test "x$DOCGEN" = "xtrue"; then
-    ( set -e
+    ( set -ex
       cd dev
       . ./env.sh
       export PATH=/home/build/rock_admin_scripts/bin:$PATH
