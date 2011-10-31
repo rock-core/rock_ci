@@ -55,8 +55,8 @@ if test "x$DOCGEN" = "xtrue"; then
 fi
 
 if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
+    touch dev/cleaned
     rm -rf dev/install
     find dev -type d -name build -exec rm -rf {} \; -prune
-    touch dev/cleaned
 fi
 
