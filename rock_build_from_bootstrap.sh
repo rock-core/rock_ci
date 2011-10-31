@@ -56,7 +56,7 @@ fi
 
 if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
     rm -rf dev/install
-    find dev -type d -name build -delete
+    find dev -type d -name build -exec rm -rf {} \; -prune
     touch dev/cleaned
 fi
 
