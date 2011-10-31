@@ -42,7 +42,7 @@ fi
 touch dev/successful
 
 if test "x$DOCGEN" = "xtrue"; then
-    ( set -ex
+    ( set -e
       cd dev
       . ./env.sh
       export PATH=/home/build/rock_admin_scripts/bin:$PATH
@@ -50,7 +50,7 @@ if test "x$DOCGEN" = "xtrue"; then
 
       gem install webgen coderay --no-rdoc --no-ri
       rock-make-doc --status=master:next,next:stable $PWD/../doc
-    ) > docgen.txt 2>&1
+    ) 2>&1 | tee docgen.txt
     touch dev/doc-successful
 fi
 
