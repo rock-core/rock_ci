@@ -12,13 +12,27 @@ else
   configfile=$CONFIG_DIR/default-$FLAVOR.yml
 fi
 
-if test -d dev && test -f dev/successful; then
-  echo "last build was successful, doing a full build"
-  $SHELL -ex rock-build-server "$@"  $configfile
+do_incremental=1
+if test "x$INCREMENTAL" = "x1"; then
+    echo "INCREMENTAL is set, doing an incremental build"
+elif test -d dev && ! test -f dev/successful; then
+    echo "last build was unsuccessful, doing an incremental build"
 else
-  echo "last build was unsuccessful, doing an incremental build"
+    echo "doing a full build"
+    do_incremental=0
+fi
+
+rm -f dev/cleaned
+if test "x$do_incremental" = "x1"; then
   $SHELL -ex rock-build-incremental "$@"  $configfile
+else
+  $SHELL -ex rock-build-server "$@"  $configfile
 fi
 
 touch dev/successful
 
+if test "x$CLEAN_IF_SUCCESSFUL" = "x1"; then
+    rm -rf dev/install
+    find dev -type d -name build -delete
+    touch dev/cleaned
+fi
