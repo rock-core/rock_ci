@@ -30,17 +30,34 @@ if test "x$do_incremental" = "x1" && test -f dev/cleaned; then
     exit 0
 fi
 
+rm -f dev/successful
+rm -f dev/doc-successful
 rm -f dev/cleaned
+rm -f docgen.txt
 if test "x$do_incremental" = "x1"; then
   $SHELL -ex rock-build-incremental "$@"  $configfile
 else
   $SHELL -ex rock-build-server "$@"  $configfile
 fi
-
 touch dev/successful
+
+if test "x$DOCGEN" = "xtrue"; then
+    autoproj doc
+    ( set -e
+      cd dev
+      . ./env.sh
+      export PATH=/home/build/rock_admin_scripts/bin:$PATH
+      export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
+
+      gem install webgen coderay --no-rdoc --no-ri
+      rock-make-doc --status=master:next,next:stable $PWD/../doc
+    ) > docgen.txt 2>&1
+    touch dev/doc-successful
+fi
 
 if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
     rm -rf dev/install
     find dev -type d -name build -delete
     touch dev/cleaned
 fi
+
