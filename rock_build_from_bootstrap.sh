@@ -49,6 +49,7 @@ if test "x$DOCGEN" = "xtrue"; then
       export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
 
       gem install webgen coderay --no-rdoc --no-ri
+      sudo apt-get install doxygen
       rm -rf doc
       rock-make-doc --status=master:next,next:stable $PWD/../doc
     ) 2>&1 | tee docgen.txt
@@ -58,6 +59,7 @@ fi
 if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
     touch dev/cleaned
     rm -rf dev/install
+
     find dev -type d -name build -exec rm -rf {} \; -prune
 fi
 
