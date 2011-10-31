@@ -47,11 +47,11 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	if test "$?" -ne "0"; then
 	    echo "generation failed for $workspace_name:$flavor_name"
 	    echo "log in $workspace_name-$flavor_name.txt"
-	    cp $path/docgen.txt $workspace_name-$flavor_name.txt
 	    result=1
 	else
 	    touch $path/docgen.stamp
 	fi
+        cp $path/docgen.txt $workspace_name-$flavor_name.txt
 	set -e
     done
 done
