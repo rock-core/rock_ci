@@ -42,7 +42,6 @@ fi
 touch dev/successful
 
 if test "x$DOCGEN" = "xtrue"; then
-    autoproj doc
     ( set -e
       cd dev
       . ./env.sh
