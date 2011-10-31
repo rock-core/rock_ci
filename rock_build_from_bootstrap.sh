@@ -13,8 +13,11 @@ else
 fi
 
 do_incremental=1
-if test "x$INCREMENTAL" = "xtrue"; then
-    echo "INCREMENTAL is set, doing an incremental build"
+if text "x$INCREMENTAL" = "xtrue" || test "x$MODE" = "xincremental"; then
+    echo "MODE=incremental, doing an incremental build"
+elif test "x$MODE" = "xbootstrap"; then
+    echo "MODE=bootstrap, doing a full build"
+    do_incremental=0
 elif test -d dev && ! test -f dev/successful; then
     echo "last build was unsuccessful, doing an incremental build"
 elif test "x$SKIP_SUCCESSFUL" = "xtrue" && test -d dev && test -f dev/successful; then
