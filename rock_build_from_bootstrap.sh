@@ -18,11 +18,13 @@ if test "x$SKIP_SUCCESSFUL" = "xtrue" && test -d dev && test -f dev/successful; 
 fi
 
 do_incremental=1
+do_full_cleanup=0
 if test "x$INCREMENTAL" = "xtrue" || test "x$MODE" = "xincremental"; then
     echo "MODE=incremental, doing an incremental build"
 elif test "x$MODE" = "xbootstrap"; then
     echo "MODE=bootstrap, doing a full build"
     do_incremental=0
+    do_full_cleanup=1
 elif test -d dev && ! test -f dev/successful; then
     echo "last build was unsuccessful, doing an incremental build"
 else
@@ -39,11 +41,19 @@ rm -f dev/successful
 rm -f dev/doc-successful
 rm -f dev/cleaned
 rm -f docgen.txt
-if test "x$do_incremental" = "x1"; then
-  $SHELL -ex rock-build-incremental "$@"  $configfile
-else
-  $SHELL -ex rock-build-server "$@"  $configfile
+
+if test "x$do_incremental" = "x0"; then
+    rm -rf dev/install
+    find dev -type d -name build -exec rm -rf {} \; -prune
+
+    if test "x$do_full_cleanup" = "x1"; then
+        rm -rf dev
+    else
+        rm -rf dev/.gems dev/autoproj
+    fi
 fi
+
+$SHELL -ex rock-build-incremental "$@"  $configfile
 touch dev/successful
 mkdir -p logs
 cp -r dev/install/log logs/`date +%F-%H%M%S`
