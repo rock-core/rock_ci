@@ -57,7 +57,7 @@ if test "x$DOCGEN" = "xtrue"; then
 
       gem install webgen coderay --no-rdoc --no-ri
       sudo apt-get install doxygen
-      rm -rf doc
+      rm -rf $PWD/../doc
       rock-make-doc --status=master:next,next:stable $PWD/../doc
     ) 2>&1 | tee docgen.txt
     touch dev/doc-successful
