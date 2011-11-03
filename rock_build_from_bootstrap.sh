@@ -43,12 +43,11 @@ rm -f dev/cleaned
 rm -f docgen.txt
 
 if test "x$do_incremental" = "x0"; then
-    rm -rf dev/install
-    find dev -type d -name build -exec rm -rf {} \; -prune
-
     if test "x$do_full_cleanup" = "x1"; then
         rm -rf dev
-    else
+    elif test -d dev; then
+        rm -rf dev/install
+        find dev -type d -name build -exec rm -rf {} \; -prune
         rm -rf dev/.gems dev/autoproj
     fi
 fi
