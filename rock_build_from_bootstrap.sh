@@ -68,7 +68,7 @@ if test "x$DOCGEN" = "xtrue"; then
       sudo apt-get install doxygen
       rm -rf $PWD/../doc
       rock-make-doc --status=master:next,next:stable $PWD/../doc "-b $FLAVOR git://gitorious.org/rock/doc.git"
-    ) 2>&1 | tee docgen.txt
+    ) > docgen.txt 2>&1
     touch dev/doc-successful
 fi
 
