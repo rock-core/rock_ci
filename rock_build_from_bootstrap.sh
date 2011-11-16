@@ -64,7 +64,9 @@ if test "x$DOCGEN" = "xtrue"; then
       export PATH=/home/build/rock_admin_scripts/bin:$PATH
       export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
 
-      gem install hoe webgen coderay --no-rdoc --no-ri
+      gem install hoe webgen coderay rdoc --no-rdoc --no-ri
+      gem rdoc autobuild
+      gem rdoc autoproj
       sudo apt-get install doxygen
       rm -rf $PWD/../doc
       rock-make-doc --status=master:next,next:stable $PWD/../doc "-b $FLAVOR git://gitorious.org/rock/doc.git"
