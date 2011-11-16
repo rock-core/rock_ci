@@ -74,6 +74,11 @@ if test "x$DOCGEN" = "xtrue"; then
     touch dev/doc-successful
 fi
 
+# Save the logs AFTER documentation generation, so that they include docgen logs
+# as well
+mkdir -p logs
+cp -r dev/install/log logs/`date +%F-%H%M%S`
+
 if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
     touch dev/cleaned
     rm -rf dev/install
