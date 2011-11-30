@@ -54,8 +54,6 @@ fi
 
 $SHELL -ex rock-build-incremental "$@"  $configfile
 touch dev/successful
-mkdir -p logs
-cp -r dev/install/log logs/`date +%F-%H%M%S`
 
 if test "x$DOCGEN" = "xtrue"; then
     ( set -e
