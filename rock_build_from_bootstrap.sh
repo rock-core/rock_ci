@@ -56,7 +56,10 @@ $SHELL -ex rock-build-incremental "$@"  $configfile
 touch dev/successful
 
 if test "x$DOCGEN" = "xtrue"; then
-    ( set -e
+    ( 
+      ## cloning the documentation from gitorious fails every once in a while.
+      # Ignore documentation generation errors for now
+      # set -e
       cd dev
       . ./env.sh
       export PATH=/home/build/rock_admin_scripts/bin:$PATH
