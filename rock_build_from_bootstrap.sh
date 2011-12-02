@@ -59,7 +59,7 @@ if test "x$DOCGEN" = "xtrue"; then
     ( 
       ## cloning the documentation from gitorious fails every once in a while.
       # Ignore documentation generation errors for now
-      # set -e
+      set +e
       cd dev
       . ./env.sh
       export PATH=/home/build/rock_admin_scripts/bin:$PATH
