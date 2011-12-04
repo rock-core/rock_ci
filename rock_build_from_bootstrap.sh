@@ -70,7 +70,7 @@ if test "x$DOCGEN" = "xtrue"; then
       gem rdoc autoproj
       sudo apt-get install doxygen
       rm -rf $PWD/../doc
-      rock-make-doc --status=master:next,next:stable $PWD/../doc "-b $FLAVOR git://gitorious.org/rock/doc.git"
+      rock-make-doc --status=master:next,next:stable $PWD/../doc "-b $FLAVOR http://git.gitorious.org/rock/doc.git"
     ) > docgen.txt 2>&1
     touch dev/doc-successful
 fi
