@@ -14,3 +14,4 @@ FAMOS_SYSTEM_TYPE: 'sherpa'
 BASE_LOG_LEVEL: 'DEBUG'
 GST_ARCHITECTURE: native
 GST_PATH: /opt/arm/gst
+WITH_PYTHON: true

@@ -9,4 +9,5 @@ rtt_target: gnulinux
 rtt_corba_implementation: omniorb
 osdeps_mode: all
 USE_OCL: false
+WITH_PYTHON: true
 
