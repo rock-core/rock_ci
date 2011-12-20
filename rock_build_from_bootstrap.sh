@@ -52,6 +52,9 @@ if test "x$do_incremental" = "x0"; then
     fi
 fi
 
+# Always delete autoproj's configuration directory so that we always start fresh
+# Otherwise, it would not get updated
+rm -rf dev/autoproj
 $SHELL -ex rock-build-incremental "$@"  $configfile
 touch dev/successful
 
