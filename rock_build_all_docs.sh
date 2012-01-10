@@ -20,8 +20,8 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	echo
 	flavor_name=`basename $flavor_dir`
 	path=$flavor_dir/$SRC_DIR_SUFFIX
-	if ! test -f $path/dev/successful; then
-	    echo "last build of $workspace_name:$flavor_name seems to not have been successful. Skipping documentation generation"
+	if ! test -f $path/doc-successful; then
+	    echo "last build of $workspace_name:$flavor_name did not generate documentation, skipping"
 	    continue
 	fi
 
@@ -30,13 +30,16 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
             rm -f $path/docgen.stamp
         fi
 
-	if test -f $path/docgen.stamp && test $path/docgen.stamp -nt $path/dev/successful; then
+	if test -f $path/docgen.stamp && test $path/docgen.stamp -nt $path/dev/doc-successful; then
 	    echo "build of $workspace_name:$flavor_name did not get updated since last time. Skipping ..."
 	    continue
 	fi
 
 	echo "generating documentation for $workspace_name:$flavor_name"
-        rm -rf $path/doc $path/docgen*
+        rm -rf $path/doc
+        mkdir $path/doc
+        cp -r $path/api $path/doc
+
 	( set -e
 	  cd $path/dev
 	  . ./env.sh
@@ -44,7 +47,22 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
 
 	  gem install webgen coderay --no-rdoc --no-ri
-          rock-make-doc --status=master:next,next:stable $PWD/../doc
+
+          tempdir=$(mktemp -d)
+          echo "creating rock's main documentation"
+          cd $tempdir
+          git clone http://git.gitorious.org/rock/doc.git main
+
+          cd $autoproj_dir
+          rock-directory-pages $status "$tempdir/main/src/package_directory" $path/doc/api
+
+          cd $tempdir/main
+          rake
+          echo "moving main documentation in $path/doc"
+          mv out/* $path/doc
+
+          echo "deleting $tempdir"
+          rm -rf $tempdir
 	) > $path/docgen.txt 2>&1
 	if test "$?" -ne "0"; then
 	    echo "generation failed for $workspace_name:$flavor_name"
