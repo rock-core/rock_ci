@@ -105,8 +105,13 @@ cp -r dev/install/log logs/`date +%F-%H%M%S`
 
 if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
     touch dev/cleaned
-    rm -rf dev/install
 
+    rm -rf archive_cache
+    mv dev/install/cache archive_cache
+    rm -rf dev/install
     find dev -type d -name build -exec rm -rf {} \; -prune
+
+    mkdir -p dev/install
+    mv archive_cache dev/install
 fi
 
