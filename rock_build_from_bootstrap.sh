@@ -55,7 +55,7 @@ fi
 
 # Always delete autoproj's configuration directory so that we always start fresh
 # Otherwise, it would not get updated
-rm -rf dev/autoproj
+rm -rf dev/autoproj dev/.remotes
 $SHELL -ex rock-build-incremental "$@"  $configfile
 touch dev/successful
 
