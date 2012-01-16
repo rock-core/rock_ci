@@ -10,4 +10,4 @@ rtt_corba_implementation: omniorb
 osdeps_mode: all
 USE_OCL: false
 WITH_PYTHON: true
-
+UPDATE_PCL_FROM_SVN: true
