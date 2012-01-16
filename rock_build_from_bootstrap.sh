@@ -43,6 +43,13 @@ rm -f dev/cleaned
 rm -f docgen.txt
 rm -rf api
 
+# If the current dev/install folder has a cache of the downloaded archives, then
+# save it
+if test -d dev/install/cache; then
+    mkdir -p archive_cache
+    cp -rf dev/install/cache/* archive_cache
+fi
+
 if test "x$do_incremental" = "x0"; then
     if test "x$do_full_cleanup" = "x1"; then
         rm -rf dev
@@ -56,6 +63,13 @@ fi
 # Always delete autoproj's configuration directory so that we always start fresh
 # Otherwise, it would not get updated
 rm -rf dev/autoproj dev/.remotes
+
+# If there is an archive cache, copy it into our working directory
+if test -d archive_cache; then
+    mkdir -p dev/install/cache
+    cp -rf archive_cache/* dev/install/cache
+fi
+
 $SHELL -ex rock-build-incremental "$@"  $configfile
 touch dev/successful
 
@@ -106,12 +120,11 @@ cp -r dev/install/log logs/`date +%F-%H%M%S`
 if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
     touch dev/cleaned
 
-    rm -rf archive_cache
-    mv dev/install/cache archive_cache
+    if test -d dev/install/cache; then
+        mkdir -p archive_cache
+        cp -rf dev/install/cache/* archive_cache
+    fi
     rm -rf dev/install
     find dev -type d -name build -exec rm -rf {} \; -prune
-
-    mkdir -p dev/install
-    mv archive_cache dev/install
 fi
 
