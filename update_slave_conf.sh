@@ -8,6 +8,18 @@ if test -z "$DONE_SLAVE_CONF"; then
     exec $0
 fi
 
-cd /home/build/rock_admin_scripts
-git remote update
-git reset --hard origin/master
+if test -d /home/build/rock_buildconf; then
+    cd /home/build/rock_buildconf
+    git remote update
+    git reset --hard origin/master
+else
+    git clone git://gitorious.org/rock/buildconf-all.git /home/build/rock_buildconf
+fi
+
+if test -d /home/build/rock_admin_scripts; then
+    cd /home/build/rock_admin_scripts
+    git remote update
+    git reset --hard origin/master
+else
+    git clone git://gitorious.org/rock/admin_scripts.git /home/build/admin_scripts
+fi
