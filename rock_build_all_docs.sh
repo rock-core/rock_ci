@@ -59,7 +59,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           rock-directory-pages $status "$tempdir/main/src/package_directory" $path/doc/api
 
           cd $tempdir/main
-          rake
+          webgen
           echo "moving main documentation in $path/doc"
           mv out/* $path/doc
 
