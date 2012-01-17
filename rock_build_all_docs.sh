@@ -42,7 +42,9 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 
 	( set -e
 	  cd $path/dev
-	  . ./env.sh
+          source /home/build/jenkins/workspace/RockIncremental/FLAVOR/master/label/DebianUnstable/dev/env.sh
+          export AUTOPROJ_ROOT_DIR=$PWD
+          export GEM_HOME=$PWD/.gems
           export PATH=/home/build/rock_admin_scripts/bin:$PATH
           export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
 
