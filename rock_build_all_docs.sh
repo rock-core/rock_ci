@@ -53,7 +53,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           cd $tempdir
           git clone http://git.gitorious.org/rock/doc.git main
 
-          cd $autoproj_dir
+          cd $path/dev
           rock-directory-pages $status "$tempdir/main/src/package_directory" $path/doc/api
 
           cd $tempdir/main
