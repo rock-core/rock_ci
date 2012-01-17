@@ -20,7 +20,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	echo
 	flavor_name=`basename $flavor_dir`
 	path=$flavor_dir/$SRC_DIR_SUFFIX
-	if ! test -f $path/doc-successful; then
+	if ! test -f $path/dev/doc-successful; then
 	    echo "last build of $workspace_name:$flavor_name did not generate documentation, skipping"
 	    continue
 	fi
