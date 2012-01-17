@@ -44,8 +44,9 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	  cd $path/dev
           source /home/build/jenkins/workspace/RockIncremental/FLAVOR/master/label/DebianUnstable/dev/env.sh
           export AUTOPROJ_ROOT_DIR=$PWD
+          # Trick autoproj to think that we're setup for the current directory
           export GEM_HOME=$PWD/.gems
-          export PATH=/home/build/rock_admin_scripts/bin:$PATH
+          export PATH=/home/build/rock_admin_scripts/bin:$GEM_HOME/bin:$PATH
           export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
 
 	  gem install webgen coderay --no-rdoc --no-ri
