@@ -57,7 +57,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           git clone http://git.gitorious.org/rock/doc.git main
 
           cd $path/dev
-          rock-directory-pages $status "$tempdir/main/src/package_directory" $path/doc/api
+          rock-directory-pages --status=master:next,next:stable "$tempdir/main/src/package_directory" $path/doc/api
 
           cd $tempdir/main
           webgen
