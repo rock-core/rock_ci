@@ -26,7 +26,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	fi
 
         set +e
-        if test "$FORCE_DOC_GEN" = "1"; then
+        if test "x$FORCE_DOC_GEN" = "xtrue"; then
             rm -f $path/docgen.stamp
         fi
 
