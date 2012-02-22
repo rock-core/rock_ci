@@ -3,7 +3,7 @@
 set -ex
 
 export CCACHE_BASEDIR=$PWD/dev
-export CCACHE_DIR=/home/build/ccache
+export CCACHE_DIR=/home/build/jenkins/workspace/ccache
 export PATH=/home/build/rock_admin_scripts/bin:$PATH
 CONFIG_DIR=/home/build/slave_conf
 
