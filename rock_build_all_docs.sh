@@ -49,7 +49,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           export PATH=/home/build/rock_admin_scripts/bin:$GEM_HOME/bin:$PATH
           export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
 
-	  gem install webgen coderay --no-rdoc --no-ri
+	  gem install webgen coderay PriorityQueue --no-rdoc --no-ri
 
           tempdir=$(mktemp -d)
           echo "creating rock's main documentation"
