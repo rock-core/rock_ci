@@ -23,10 +23,14 @@ do_incremental=1
 do_full_cleanup=0
 if test "x$INCREMENTAL" = "xtrue" || test "x$MODE" = "xincremental"; then
     echo "MODE=incremental, doing an incremental build"
-elif test "x$MODE" = "xbootstrap"; then
-    echo "MODE=bootstrap, doing a full build"
+elif test "x$MODE" = "xfull-bootstrap"; then
+    echo "MODE=full-bootstrap, doing a full build, including checking out packages"
     do_incremental=0
     do_full_cleanup=1
+elif test "x$MODE" = "xbootstrap"; then
+    echo "MODE=bootstrap, doing a full build but not checking out packages again. Use full-bootstrap for that"
+    do_incremental=0
+    do_full_cleanup=0
 elif test -d dev && ! test -f dev/successful; then
     echo "last build was unsuccessful, doing an incremental build"
 else
