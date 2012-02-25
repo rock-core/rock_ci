@@ -2,7 +2,7 @@
 
 set -x
 
-CCACHE_DISABLE=1
+export CCACHE_DISABLE=1
 SRC_DIR_WORKSPACE_PREFIX=/home/build/jenkins/workspace
 SRC_DIR_FLAVOR_PREFIX=FLAVOR
 SRC_DIR_SUFFIX=label/DebianUnstable
