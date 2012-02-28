@@ -53,7 +53,7 @@ rm -rf api
 # save it
 if test -d dev/install/cache; then
     mkdir -p archive_cache
-    cp -rf dev/install/cache/* archive_cache
+    cp -af dev/install/cache/* archive_cache
 fi
 
 if test "x$do_incremental" = "x0"; then
@@ -73,7 +73,7 @@ rm -rf dev/autoproj dev/.remotes
 # If there is an archive cache, copy it into our working directory
 if test -d archive_cache; then
     mkdir -p dev/install/cache
-    cp -rf archive_cache/* dev/install/cache
+    cp -af archive_cache/* dev/install/cache
 fi
 
 $SHELL -ex rock-build-incremental "$@"  $configfile
@@ -128,9 +128,13 @@ if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
 
     if test -d dev/install/cache; then
         mkdir -p archive_cache
-        cp -rf dev/install/cache/* archive_cache
+        cp -af dev/install/cache/* archive_cache
     fi
     rm -rf dev/install
     find dev -type d -name build -exec rm -rf {} \; -prune
+    if test -d archive_cache; then
+        mkdir -p dev/install/cache
+        cp -af archive_cache/* dev/install/cache
+    fi
 fi
 
