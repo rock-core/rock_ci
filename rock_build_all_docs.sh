@@ -39,6 +39,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	echo "generating documentation for $workspace_name:$flavor_name"
         rm -rf $path/doc
         mkdir $path/doc
+        cp -r $path/api $path/doc
 
 	( set -e
 	  cd $path/dev
@@ -55,10 +56,9 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           echo "creating rock's main documentation"
           cd $tempdir
           git clone http://git.gitorious.org/rock/doc.git main
-          cp -r $path/api main/src/api
 
           cd $path/dev
-          rock-directory-pages --status=master:next,next:stable "$tempdir/main/src" $tempdir/main/src/api
+          rock-directory-pages --status=master:next,next:stable "$tempdir/main/src" $path/doc/api
 
           cd $tempdir/main
           webgen
