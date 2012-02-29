@@ -53,7 +53,7 @@ rm -rf api
 # save it
 if test -d dev/install/cache; then
     mkdir -p archive_cache
-    cp -af dev/install/cache/* archive_cache
+    rsync -a dev/install/cache/ archive_cache/
 fi
 
 if test "x$do_incremental" = "x0"; then
@@ -73,7 +73,7 @@ rm -rf dev/autoproj dev/.remotes
 # If there is an archive cache, copy it into our working directory
 if test -d archive_cache; then
     mkdir -p dev/install/cache
-    cp -af archive_cache/* dev/install/cache
+    rsync -a archive_cache/ dev/install/cache/
 fi
 
 $SHELL -ex rock-build-incremental "$@"  $configfile
@@ -95,13 +95,13 @@ if test "x$DOCGEN" = "xtrue"; then
       echo "generating the API documentation from the autoproj packages"
       autoproj doc
       echo "copying API documentation to $api_dir"
-      cp -r install/doc $api_dir
+      rsync -a --delete install/doc/ $api_dir/
       
       autoproj_version=`$GEM_HOME/bin/autoproj --version | sed 's/autoproj.*v//'`
       autoproj_api_dir=$GEM_HOME/doc/autoproj-$autoproj_version
       if test -d $autoproj_api_dir; then
           echo "copying autoproj API documentation to $api_dir/autoproj"
-          cp -r $autoproj_api_dir/rdoc $api_dir/autoproj
+          rsync -a --delete $autoproj_api_dir/rdoc/ $api_dir/autoproj/
       else
           echo "could not find the autoproj API in $autoproj_api_dir"
       fi
@@ -110,7 +110,7 @@ if test "x$DOCGEN" = "xtrue"; then
       autobuild_api_dir=$GEM_HOME/doc/autobuild-$autobuild_version
       if test -d $autobuild_api_dir; then
           echo "copying autobuild API documentation to $api_dir/autobuild"
-          cp -r $autobuild_api_dir/rdoc $api_dir/autobuild
+          rsync -a $autobuild_api_dir/rdoc/ $api_dir/autobuild/
       else
           echo "could not find the autobuild API in $autobuild_api_dir"
       fi
@@ -128,13 +128,13 @@ if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
 
     if test -d dev/install/cache; then
         mkdir -p archive_cache
-        cp -af dev/install/cache/* archive_cache
+        rsync -a dev/install/cache/ archive_cache/
     fi
     rm -rf dev/install
     find dev -type d -name build -exec rm -rf {} \; -prune
     if test -d archive_cache; then
         mkdir -p dev/install/cache
-        cp -af archive_cache/* dev/install/cache
+        rsync -a archive_cache/ dev/install/cache/
     fi
 fi
 
