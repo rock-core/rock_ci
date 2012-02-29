@@ -42,7 +42,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
         cp -r $path/api $path/doc
         if test -d archive_cache; then
             mkdir -p dev/install/cache
-            cp -af archive_cache/* dev/install/cache
+            rsync -a archive_cache/ dev/install/cache/
         fi
 
 	( set -e
