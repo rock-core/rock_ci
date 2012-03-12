@@ -71,7 +71,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 
           echo "deleting $tempdir"
           rm -rf $tempdir
-	) > $path/docgen.txt 2>&1
+	) >> $path/docgen.txt 2>&1
 	if test "$?" -ne "0"; then
 	    echo "generation failed for $workspace_name:$flavor_name"
 	    echo "log in $workspace_name-$flavor_name.txt"
