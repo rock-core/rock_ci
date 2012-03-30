@@ -2,21 +2,35 @@
 
 set -ex
 
-export CCACHE_BASEDIR=$PWD/dev
-export CCACHE_DIR=/home/build/jenkins/workspace/ccache
-export PATH=/home/build/rock_admin_scripts/bin:$PATH
-CONFIG_DIR=/home/build/slave_conf
+CONFIG_DIR=$(dirname $0)
+job_name=default
+job_type=master
+if test -n "$JOB_NAME"; then
+    job_basename=`dirname $JOB_NAME`
+fi
+if test -n "$FLAVOR"; then
+    job_type=$FLAVOR
+fi
 
-job_basename=`dirname $JOB_NAME`
-if test -f $CONFIG_DIR/$job_basename-$FLAVOR.yml; then
-  configfile=$CONFIG_DIR/$job_basename-$FLAVOR.yml
+if test -f $CONFIG_DIR/$job_name-$job_type.config; then
+  . $CONFIG_DIR/$job_name-$job_type.config
+elif test -f $CONFIG_DIR/default-$job_type.config; then
+  . $CONFIG_DIR/default-$job_type.config
+fi
+
+if test -f $CONFIG_DIR/$job_name-$job_type.yml; then
+  configfile=$CONFIG_DIR/$job_name-$job_type.yml
 else
-  configfile=$CONFIG_DIR/default-$FLAVOR.yml
+  configfile=$CONFIG_DIR/default-$job_type.yml
 fi
 
 if test "x$SKIP_SUCCESSFUL" = "xtrue" && test -d dev && test -f dev/successful; then
     echo "last build was successful and SKIP_SUCCESSFUL is set, doing nothing"
     exit 0
+fi
+
+if test -z "$MODE"; then
+    MODE=auto
 fi
 
 do_incremental=1
