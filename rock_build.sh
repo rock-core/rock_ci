@@ -1,4 +1,26 @@
 #! /bin/bash
+#
+# Main build script in all build server jobs
+#
+# The script assumes that the job is located in a directory whose first element
+# is the job name (it is the case when using jenkins)
+#
+# Control environment variables:
+#
+#   SKIP_SUCCESSFUL: if set to true, any build show last result was successful
+#                    is ignored. The default is false.
+#   MODE:
+#       full-bootstrap: remove the complete dev/ directory and bootstrap fresh
+#       bootstrap: keep the currently checked out code in dev/. Just delete all
+#                  build byproducts, gems and autoproj configuration
+#       incremental: builds from the current state of dev/. If the build has
+#                    been cleaned last time, the job is ignored
+#       auto: do a bootstrap if dev/ is clean and otherwise do an incremental
+#             build
+#
+#   DOCGEN: if set to true, the API documentation is generated
+#   CLEAN_IF_SUCCESSFUL: remove all build byproducts if the build finishes
+#                        successfully (useful to keep disk usage low)
 
 set -ex
 
