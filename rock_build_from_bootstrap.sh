@@ -6,7 +6,7 @@ CONFIG_DIR=$(dirname $0)
 job_name=default
 job_type=master
 if test -n "$JOB_NAME"; then
-    job_basename=`dirname $JOB_NAME`
+    job_name=`dirname $JOB_NAME`
 fi
 if test -n "$FLAVOR"; then
     job_type=$FLAVOR
