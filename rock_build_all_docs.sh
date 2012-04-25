@@ -62,7 +62,12 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           git clone http://git.gitorious.org/rock/doc.git main
 
           cd $path/dev
+          set +e
           rock-directory-pages --status=master:next,next:stable "$tempdir/main/src" $path/doc/api
+          if $? != 1 then
+              exit 1
+          fi
+          set -e
 
           cd $tempdir/main
           webgen
