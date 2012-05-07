@@ -17,6 +17,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
         continue
     fi
 
+    available_flavors=""
     candidates=`echo $workspace_dir/$SRC_DIR_FLAVOR_PREFIX/* | sort`
     for flavor_dir in $candidates; do
         if test -d $flavor_dir/$SRC_DIR_SUFFIX/dev; then
