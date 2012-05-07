@@ -19,12 +19,12 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
     ( cd $workspace_dir/$SRC_DIR_FLAVOR_PREFIX;
         candidates=`echo * | sort`
         for dir in $candidates; do
-            if test -d $dir/dev; then
+            if test -d $dir/$SRC_DIR_SUFFIX/dev; then
                 available_flavors="$available_flavors,$dir"
             fi
         done
     )
-    echo "available flavors: ${available_flavors}"
+    echo "available flavors: $available_flavors"
 
     for flavor_dir in $workspace_dir/$SRC_DIR_FLAVOR_PREFIX/*; do
 	echo
