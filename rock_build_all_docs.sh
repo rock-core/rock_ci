@@ -16,6 +16,16 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
         continue
     fi
 
+    ( cd $workspace_dir/$SRC_DIR_FLAVOR_PREFIX;
+        candidates=`echo * | sort`
+        for dir in $candidates; do
+            if test -d $dir/dev; then
+                available_flavors="$available_flavors,$dir"
+            fi
+        done
+    )
+    echo "available flavors: ${available_flavors}"
+
     for flavor_dir in $workspace_dir/$SRC_DIR_FLAVOR_PREFIX/*; do
 	echo
 	flavor_name=`basename $flavor_dir`
@@ -58,7 +68,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           tempdir=$(mktemp -d)
           echo "creating rock's main documentation"
           cd $tempdir
-          git clone http://git.gitorious.org/rock/doc.git main
+          git clone -b $flavor_name http://git.gitorious.org/rock/doc.git main
 
           cd $path/dev
           set +e
@@ -69,7 +79,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           set -e
 
           cd $tempdir/main
-          webgen
+          ROCK_DOC_FLAVORED=$flavor_name:$available_flavors webgen
           echo "moving main documentation in $path/doc"
           mv out/* $path/doc
 
