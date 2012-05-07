@@ -7,6 +7,7 @@ SRC_DIR_WORKSPACE_PREFIX=/home/build/jenkins/workspace
 SRC_DIR_FLAVOR_PREFIX=FLAVOR
 SRC_DIR_SUFFIX=label/DebianUnstable
 LOG_DIR=/home/build/logs
+root_dir=$PWD
 
 mkdir -p $LOG_DIR
 result=0
@@ -16,18 +17,17 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
         continue
     fi
 
-    ( cd $workspace_dir/$SRC_DIR_FLAVOR_PREFIX;
-        candidates=`echo * | sort`
-        for flavor_name in $candidates; do
-            if test -d $flavor_name/$SRC_DIR_SUFFIX/dev; then
-                if test -z "$available_flavors"; then
-                    available_flavors="$flavor_name"
-                else
-                    available_flavors="$available_flavors,$flavor_name"
-                fi
+    candidates=`echo $workspace_dir/$SRC_DIR_FLAVOR_PREFIX/* | sort`
+    for flavor_dir in $candidates; do
+        if test -d $flavor_dir/$SRC_DIR_SUFFIX/dev; then
+            flavor_name=`basename $flavor_dir`
+            if test -z "$available_flavors"; then
+                available_flavors="$flavor_name"
+            else
+                available_flavors="$available_flavors,$flavor_name"
             fi
-        done
-    )
+        fi
+    done
     echo "available flavors: $available_flavors"
 
     for flavor_dir in $workspace_dir/$SRC_DIR_FLAVOR_PREFIX/*; do
