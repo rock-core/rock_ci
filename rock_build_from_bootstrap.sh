@@ -107,6 +107,10 @@ if test "x$DOCGEN" = "xtrue"; then
 
       echo "generating the API documentation from the autoproj packages"
       autoproj doc
+      # HACK: remove slam/pcl as we're low on space on the website and it is a
+      # publicly available API documentation. We should have a way to specify a
+      # link in the manifest.xml instead
+      rm -rf install/doc/slam/pcl
       echo "copying API documentation to $api_dir"
       rsync -a --delete install/doc/ $api_dir/
       
