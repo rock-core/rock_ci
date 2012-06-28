@@ -61,7 +61,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 
 	( set -e
 	  cd $path/dev
-          source /home/build/jenkins/workspace/RockIncremental/FLAVOR/master/label/DebianUnstable/dev/env.sh
+          source $path/dev/env.sh
           export AUTOPROJ_ROOT_DIR=$PWD
           # Trick autoproj to think that we're setup for the current directory
           export GEM_HOME=$PWD/.gems
@@ -71,14 +71,27 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	  gem install webgen coderay PriorityQueue --no-rdoc --no-ri
 
           tempdir=$(mktemp -d)
-          echo "creating rock's main documentation"
+          echo "creating rock's main documentation in $tempdir/main"
           cd $tempdir
-          git clone -b $flavor_name http://git.gitorious.org/rock/doc.git main
+          for i in 1 2 3 4 5; do
+              git clone -b $flavor_name git://git.gitorious.org/rock/doc.git main
+              clone_result="$?"
+              echo "$clone_result"
+              if test "$clone_result" != "0" ; then
+                  echo "cloning doc.git from gitorious failed for $path/dev with $clone_result - retrying after 60s"
+                  rm -rf main
+                  sleep 60
+              else
+                  break
+              fi
+          done
+          
 
           cd $path/dev
           set +e
           rock-directory-pages --status=master:next,next:stable "$tempdir/main/src" $path/doc/api
           if test '$?' = '1'; then
+              echo "Execution of rock-directory-pages failed for $path/dev"
               exit 1
           fi
           set -e
@@ -102,5 +115,6 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	set -e
     done
 done
+echo "Result of document generation"
 exit $result
 
