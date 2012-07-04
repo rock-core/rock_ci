@@ -61,7 +61,9 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 
 	( set -e
 	  cd $path/dev
-          source $path/dev/env.sh
+          # Source here the environment of the flavor-corresponding rock bootstrap - which should be NOT cleaned after 
+          # a successful build, since typelib and other components will be required for the call to rock-directory-pages 
+          source /home/build/jenkins/workspace/RockIncremental/FLAVOR/$flavor_name/label/DebianUnstable/dev/env.sh
           export AUTOPROJ_ROOT_DIR=$PWD
           # Trick autoproj to think that we're setup for the current directory
           export GEM_HOME=$PWD/.gems
