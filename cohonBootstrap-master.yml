@@ -13,3 +13,4 @@ WITH_PYTHON: false
 UPDATE_PCL_FROM_SVN: true
 DistCC: "no"
 CCache: "no"
+COHON_CONFIG_PATH: /home/build/jenkins/workspace/cohonBootstrap/FLAVOR/master/label/DebianUnstable/dev/cohon_base/cohon_main/etc/
