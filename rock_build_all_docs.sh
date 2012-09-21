@@ -99,6 +99,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           set -e
 
           cd $tempdir/main
+          webgen --version
           ROCK_DOC_FLAVORED=$flavor_name:$available_flavors webgen
           echo "moving main documentation in $path/doc"
           mv out/* $path/doc
