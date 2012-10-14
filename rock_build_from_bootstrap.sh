@@ -118,7 +118,7 @@ if test "x$DOCGEN" = "xtrue"; then
       echo "copying API documentation to $api_dir"
       rsync -a --delete install/doc/ $api_dir/
       
-      autoproj_version=`$GEM_HOME/bin/autoproj --version | sed 's/autoproj.*v//'`
+      autoproj_version=`ruby -rautoproj -e "puts Autoproj::VERSION"`
       autoproj_api_dir=$GEM_HOME/doc/autoproj-$autoproj_version
       if test -d $autoproj_api_dir; then
           echo "copying autoproj API documentation to $api_dir/autoproj"
@@ -127,7 +127,7 @@ if test "x$DOCGEN" = "xtrue"; then
           echo "could not find the autoproj API in $autoproj_api_dir"
       fi
       
-      autobuild_version=`$GEM_HOME/bin/autobuild --version | sed 's/autobuild.*v//'`
+      autobuild_version=`ruby -rautobuild -e "puts Autobuild::VERSION"`
       autobuild_api_dir=$GEM_HOME/doc/autobuild-$autobuild_version
       if test -d $autobuild_api_dir; then
           echo "copying autobuild API documentation to $api_dir/autobuild"
