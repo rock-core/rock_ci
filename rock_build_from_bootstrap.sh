@@ -106,8 +106,9 @@ if test "x$DOCGEN" = "xtrue"; then
       . ./env.sh
 
       gem install hoe coderay rdoc yard webgen --no-rdoc --no-ri
-      gem yard autoproj
-      gem yard autobuild
+      rm -rf $GEM_HOME/doc
+      gem rdoc autoproj
+      gem rdoc autobuild
 
       echo "generating the API documentation from the autoproj packages"
       autoproj doc
