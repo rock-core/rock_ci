@@ -26,9 +26,15 @@ else
   configfile=$CONFIG_DIR/default-$job_type.yml
 fi
 
-if test "x$SKIP_SUCCESSFUL" = "xtrue" && test -d dev && test -f dev/successful; then
-    echo "last build was successful and SKIP_SUCCESSFUL is set, doing nothing"
-    exit 0
+if test "x$SKIP_SUCCESSFUL" = "xtrue" && test -d dev; then
+    if test -f dev/successful
+        if test "x$DOCGEN" != "xtrue" || test -f dev/doc-successful; then
+            echo "last build was successful and SKIP_SUCCESSFUL is set, doing nothing"
+            exit 0
+        else
+            MODE=incremental
+        fi
+    fi
 fi
 
 if test -z "$MODE"; then
