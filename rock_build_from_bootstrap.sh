@@ -129,7 +129,7 @@ if test "x$DOCGEN" = "xtrue"; then
       autoproj_api_dir=$GEM_HOME/doc/autoproj-$autoproj_version
       if test -d $autoproj_api_dir; then
           echo "copying autoproj API documentation to $api_dir/autoproj"
-          rsync -a --delete $autoproj_api_dir/yard/ $api_dir/autoproj/
+          rsync -a --delete $autoproj_api_dir/rdoc/ $api_dir/autoproj/
       else
           echo "could not find the autoproj API in $autoproj_api_dir"
       fi
@@ -138,7 +138,7 @@ if test "x$DOCGEN" = "xtrue"; then
       autobuild_api_dir=$GEM_HOME/doc/autobuild-$autobuild_version
       if test -d $autobuild_api_dir; then
           echo "copying autobuild API documentation to $api_dir/autobuild"
-          rsync -a $autobuild_api_dir/yard/ $api_dir/autobuild/
+          rsync -a $autobuild_api_dir/rdoc/ $api_dir/autobuild/
       else
           echo "could not find the autobuild API in $autobuild_api_dir"
       fi
