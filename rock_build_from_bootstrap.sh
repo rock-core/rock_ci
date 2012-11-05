@@ -117,7 +117,7 @@ if test "x$DOCGEN" = "xtrue"; then
       gem rdoc autobuild
 
       echo "generating the API documentation from the autoproj packages"
-      autoproj doc
+      autoproj doc --no-color
       # HACK: remove slam/pcl as we're low on space on the website and it is a
       # publicly available API documentation. We should have a way to specify a
       # link in the manifest.xml instead
