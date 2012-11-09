@@ -92,7 +92,7 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           cd $path/dev
           set +e
           rock-directory-pages --status=master:next,next:stable "$tempdir/main/src" $path/doc/api
-          if test '$?' = '1'; then
+          if test "$" = "1"; then
               echo "Execution of rock-directory-pages failed for $path/dev"
               exit 1
           fi
