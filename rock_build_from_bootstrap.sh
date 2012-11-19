@@ -37,6 +37,10 @@ if test "x$SKIP_SUCCESSFUL" = "xtrue" && test -d dev; then
     fi
 fi
 
+if test -z "$RUBY"; then
+    RUBY=ruby1.8
+fi
+
 if test -z "$MODE"; then
     MODE=auto
 fi
@@ -98,7 +102,8 @@ if test -d archive_cache; then
     rsync -a archive_cache/ dev/install/cache/
 fi
 
-echo "Finished preparing, starting build at `date`"
+echo "Finished preparing, starting build at `date` with $RUBY"
+export RUBY=$RUBY
 $SHELL -ex rock-build-incremental "$@"  $configfile
 touch dev/successful
 
@@ -125,7 +130,7 @@ if test "x$DOCGEN" = "xtrue"; then
       echo "copying API documentation to $api_dir"
       rsync -a --delete install/doc/ $api_dir/
       
-      autoproj_version=`ruby -e "require 'autoproj'; puts Autoproj::VERSION"`
+      autoproj_version=`$RUBY -e "require 'autoproj'; puts Autoproj::VERSION"`
       autoproj_api_dir=$GEM_HOME/doc/autoproj-$autoproj_version
       if test -d $autoproj_api_dir; then
           echo "copying autoproj API documentation to $api_dir/autoproj"
@@ -134,7 +139,7 @@ if test "x$DOCGEN" = "xtrue"; then
           echo "could not find the autoproj API in $autoproj_api_dir"
       fi
       
-      autobuild_version=`ruby -e "require 'autobuild'; puts Autobuild::VERSION"`
+      autobuild_version=`$RUBY -e "require 'autobuild'; puts Autobuild::VERSION"`
       autobuild_api_dir=$GEM_HOME/doc/autobuild-$autobuild_version
       if test -d $autobuild_api_dir; then
           echo "copying autobuild API documentation to $api_dir/autobuild"
