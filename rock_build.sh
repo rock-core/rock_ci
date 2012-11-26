@@ -27,7 +27,9 @@ set -ex
 CONFIG_DIR=$(dirname $0)
 job_name=default
 job_type=master
-if test -n "$JOB_NAME"; then
+if test -n "$CONFIG_NAME"; then
+    job_name=$CONFIG_NAME
+elif test -n "$JOB_NAME"; then
     job_basename=`dirname $JOB_NAME`
 fi
 if test -n "$FLAVOR"; then
