@@ -1,0 +1,13 @@
+ROCK_FLAVOR: stable
+GITORIOUS: git
+GITORIOUS_ROOT: git://gitorious.org
+GITORIOUS_PUSH_ROOT: "git@gitorious.org:"
+SPACEGIT: git
+SPACEGIT_ROOT: git://spacegit.dfki.uni-bremen.de
+SPACEGIT_PUSH_ROOT: "git@spacegit.dfki.uni-bremen.de:"
+rtt_target: gnulinux
+rtt_corba_implementation: omniorb
+osdeps_mode: all
+USE_OCL: true
+WITH_PYTHON: true
+UPDATE_PCL_FROM_SVN: true
