@@ -114,7 +114,7 @@ if test -d archive_cache; then
     rsync -a archive_cache/ dev/install/cache/
 fi
 
-$SHELL -ex rock-build-incremental "$@"  $configfile
+$SHELL -ex rock-build-incremental "$@" "$configfile" "$BUILDCONF_BRANCH"
 touch dev/successful
 
 if test "x$DOCGEN" = "xtrue"; then
