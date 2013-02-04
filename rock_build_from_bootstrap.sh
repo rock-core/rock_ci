@@ -40,7 +40,9 @@ fi
 if test -z "$RUBY"; then
     RUBY=ruby1.8
 fi
-
+if test -z "$GEM"; then
+    GEM=gem1.8
+fi
 if test -z "$MODE"; then
     MODE=auto
 fi
@@ -102,8 +104,18 @@ if test -d archive_cache; then
     rsync -a archive_cache/ dev/install/cache/
 fi
 
-echo "Finished preparing, starting build at `date` with $RUBY"
 export RUBY=$RUBY
+export GEM=$GEM
+export GEM_HOME=$PWD/dev/.gems
+
+# Install yard early, some C++ packages with Ruby bindings will pick it up and
+# use it to generate the Ruby binding documentation
+if test "x$DOCGEN" = "xtrue"; then
+    $GEM install hoe coderay rdoc yard webgen --no-rdoc --no-ri
+fi
+
+echo "Finished preparing, starting build at `date` with $RUBY"
+
 $SHELL -ex rock-build-incremental "$@"  $configfile
 touch dev/successful
 
@@ -116,10 +128,9 @@ if test "x$DOCGEN" = "xtrue"; then
       cd dev
       . ./env.sh
 
-      gem install hoe coderay rdoc yard webgen --no-rdoc --no-ri
       rm -rf $GEM_HOME/doc
-      gem rdoc autoproj
-      gem rdoc autobuild
+      $GEM rdoc autoproj
+      $GEM rdoc autobuild
 
       echo "generating the API documentation from the autoproj packages"
       autoproj doc --no-color

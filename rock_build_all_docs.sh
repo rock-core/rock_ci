@@ -90,7 +90,6 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           
 
           cd $path/dev
-          set +e
           if test "$flavor_name" = "master"; then
               rock-directory-pages --status=master:next "$tempdir/main/src" $path/doc/api
           elif test "$flavor_name" = "next"; then
@@ -98,12 +97,6 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           else
               rock-directory-pages "$tempdir/main/src" $path/doc/api
           fi
-
-          if test "$" = "1"; then
-              echo "Execution of rock-directory-pages failed for $path/dev"
-              exit 1
-          fi
-          set -e
 
           cd $tempdir/main
           webgen --version
