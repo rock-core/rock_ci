@@ -1,6 +1,7 @@
 #! /bin/bash
 
 set -x
+export LANG=en_US.UTF-8
 
 export CCACHE_DISABLE=1
 SRC_DIR_WORKSPACE_PREFIX=/home/build/jenkins/workspace
