@@ -64,35 +64,28 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
           # Source here the environment of the flavor-corresponding rock bootstrap - which should be NOT cleaned after 
           # a successful build, since typelib and other components will be required for the call to rock-directory-pages 
           if test $workspace_name = "RockBootstrap19"; then
-              source /home/build/jenkins/workspace/RockBootstrap19/FLAVOR/$flavor_name/label/DebianUnstable/dev/env.sh
+              ref_install_root=/home/build/jenkins/workspace/RockBootstrap19/FLAVOR/$flavor_name/label/DebianUnstable/dev/
           else
-              source /home/build/jenkins/workspace/RockIncremental/FLAVOR/$flavor_name/label/DebianUnstable/dev/env.sh
+              ref_install_root=/home/build/jenkins/workspace/RockIncremental/FLAVOR/$flavor_name/label/DebianUnstable/dev/
           fi
-
-          export AUTOPROJ_ROOT_DIR=$PWD
+          # Install admin_scripts
+          source $ref_install_root/env.sh
+          ( cd $ref_install_root
+              aup base/admin_scripts
+              aup base/doc )
           # Trick autoproj to think that we're setup for the current directory
+          export AUTOPROJ_ROOT_DIR=$PWD
           export GEM_HOME=$PWD/.gems
-          export PATH=/home/build/rock_admin_scripts/bin:$GEM_HOME/bin:$PATH
-          export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
+          # admin_scripts is not part of the layout, it is therefore not
+          # included in env.sh. Add it to our environment
+          export PATH=$ref_install_root/base/admin_scripts/bin:$GEM_HOME/bin:$PATH
+          export RUBYLIB=$ref_install_root/base/admin_scripts/lib:$RUBYLIB
 
-	  gem install webgen coderay PriorityQueue --no-rdoc --no-ri
+	  gem install webgen coderay --no-rdoc --no-ri
 
           tempdir=$(mktemp -d)
           echo "creating rock's main documentation in $tempdir/main"
-          cd $tempdir
-          for i in 1 2 3 4 5; do
-              git clone -b $flavor_name git://git.gitorious.org/rock/doc.git main
-              clone_result="$?"
-              echo "$clone_result"
-              if test "$clone_result" != "0" ; then
-                  echo "cloning doc.git from gitorious failed for $path/dev with $clone_result - retrying after 60s"
-                  rm -rf main
-                  sleep 60
-              else
-                  break
-              fi
-          done
-          
+          git clone $ref_install_root/base/doc $tempdir
 
           cd $path/dev
           if test "$flavor_name" = "master"; then
