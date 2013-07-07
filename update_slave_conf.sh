@@ -3,7 +3,7 @@
 # Script used in a separate jenkins job to update the scripts on each slave
 
 sudo apt-get update
-sudo apt-get -y install wget ruby rubygems
+sudo apt-get -y install wget ruby rubygems doxygen
 
 if test -z "$DONE_SLAVE_CONF"; then
     cd /home/build/slave_conf

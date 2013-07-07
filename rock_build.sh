@@ -2,10 +2,11 @@
 #
 # Main build script in all build server jobs
 #
-# The script assumes that the job is located in a directory whose first element
-# is the job name (it is the case when using jenkins)
+# All arguments are passed to the autoproj_bootstrap script
 #
-# Control environment variables:
+# Control environment variables. All of these except CONFIG_DIR and CONFIG_NAME
+# can be set by creating a $CONFIG_NAME.config shell file in $CONFIG_DIR (see
+# the description of these two variables for more information)
 #
 #   SKIP_SUCCESSFUL: if set to true, any build show last result was successful
 #                    is ignored. The default is false.
@@ -21,38 +22,73 @@
 #   DOCGEN: if set to true, the API documentation is generated
 #   CLEAN_IF_SUCCESSFUL: remove all build byproducts if the build finishes
 #                        successfully (useful to keep disk usage low)
+#
+#   CONFIG_DIR: directory where configuration files are stored. For each given
+#     config name (see CONFIG_NAME below), a $CONFIG_NAME.config file is sourced
+#     at the beginning of this shell script if it exists, and a $CONFIG_NAME.yml
+#     file is used as the autoproj configuration file. It defaults to the
+#     directory containing this script.
+#   CONFIG_NAME: the name of the files to look for when loading configuration.
+#     If the configuration files cannot be found, the corresponding default
+#     config is searched as well. The default config name is obtained by
+#     replacing the part before the first dash by "default". For instance
+#     rock-master becomes default-master
+#   RUBY: full path to the ruby executable to use
+#   GEM: full path to the gem executable to use
+#   BOOTSTRAP_URL: path to the autoproj bootstrap script to run (defaults to
+#     rock-robotics.org/autoproj_bootstrap)
+#   AUTOPROJ_OSDEPS_MODE: the mode in which to run the autoproj subsystem
+#     (defaults to 'all')
+
+echo "$0 started at `date`"
 
 set -ex
 
-CONFIG_DIR=$(dirname $0)
-job_name=default
-job_type=master
-if test -n "$CONFIG_NAME"; then
-    job_name=$CONFIG_NAME
-elif test -n "$JOB_NAME"; then
-    job_basename=`dirname $JOB_NAME`
-fi
-if test -n "$FLAVOR"; then
-    job_type=$FLAVOR
+config_name=default-master
+# The directory in which configuration files are stored
+if test -z "$CONFIG_DIR"; then
+    CONFIG_DIR=$(dirname $0)
 fi
 
-if test -f $CONFIG_DIR/$job_name-$job_type.config; then
-  . $CONFIG_DIR/$job_name-$job_type.config
+default_config_name=`echo $CONFIG_NAME | sed 's/.*-\(.*\)/default-\1/'`
+
+if test -f $CONFIG_DIR/$CONFIG_NAME.config; then
+  . $CONFIG_DIR/$CONFIG_NAME.config
 elif test -f $CONFIG_DIR/default-$job_type.config; then
-  . $CONFIG_DIR/default-$job_type.config
+  . $CONFIG_DIR/$default_config_name.config
 fi
 
-if test -f $CONFIG_DIR/$job_name-$job_type.yml; then
-  configfile=$CONFIG_DIR/$job_name-$job_type.yml
+if test -f $CONFIG_DIR/$CONFIG_NAME.yml; then
+  configfile=$CONFIG_DIR/$CONFIG_NAME.yml
 else
-  configfile=$CONFIG_DIR/default-$job_type.yml
+  configfile=$CONFIG_DIR/$default_config_name.yml
 fi
 
-if test "x$SKIP_SUCCESSFUL" = "xtrue" && test -d dev && test -f dev/successful; then
-    echo "last build was successful and SKIP_SUCCESSFUL is set, doing nothing"
-    exit 0
+if test -z "$BOOTSTRAP_URL"; then
+    BOOTSTRAP_URL=http://rock-robotics.org/autoproj_bootstrap
 fi
 
+if test -z "$AUTOPROJ_OSDEPS_MODE"; then
+    AUTOPROJ_OSDEPS_MODE=all
+fi
+
+if test "x$SKIP_SUCCESSFUL" = "xtrue" && test -d dev; then
+    if test -f dev/successful; then
+        if test "x$DOCGEN" != "xtrue" || test -f dev/doc-successful; then
+            echo "last build was successful and SKIP_SUCCESSFUL is set, doing nothing"
+            exit 0
+        else
+            MODE=incremental
+        fi
+    fi
+fi
+
+if test -z "$RUBY"; then
+    RUBY=ruby1.9.1
+fi
+if test -z "$GEM"; then
+    GEM=gem1.9.1
+fi
 if test -z "$MODE"; then
     MODE=auto
 fi
@@ -114,10 +150,36 @@ if test -d archive_cache; then
     rsync -a archive_cache/ dev/install/cache/
 fi
 
-$SHELL -ex rock-build-incremental "$@" "$configfile" "$BUILDCONF_BRANCH"
+export GEM_HOME=$PWD/dev/.gems
+
+# Install yard early, some C++ packages with Ruby bindings will pick it up and
+# use it to generate the Ruby binding documentation
+if test "x$DOCGEN" = "xtrue"; then
+    $GEM install hoe coderay rdoc yard webgen --no-rdoc --no-ri
+fi
+
+# If there are no autoproj/ directory, we need to start by bootstrapping
+if ! test -d dev/autoproj; then
+    bootstrap_script_name=$(basename $BOOTSTRAP_URL)
+    rm -f $bootstrap_script_name
+    wget $BOOTSTRAP_URL
+    mkdir -p dev
+    cd dev
+    $RUBY ../$bootstrap_script_name "$@"
+fi
+
+echo "Finished preparing, starting build at `date` with $RUBY"
+
+# We can finally copy the requested config file and build
+. ./env.sh
+cp $configfile ./autoproj/config.yml
+
+autoproj update
+autoproj build
 touch dev/successful
 
 if test "x$DOCGEN" = "xtrue"; then
+    echo "Starting documentation generation at `date`"
     api_dir=$PWD/api
     # Only generate the documentation from autoproj. The complete documentation
     # is generated by a separate build target
@@ -125,17 +187,20 @@ if test "x$DOCGEN" = "xtrue"; then
       cd dev
       . ./env.sh
 
-      gem install hoe coderay rdoc webgen --no-rdoc --no-ri
-      sudo apt-get install doxygen
-      gem rdoc autoproj
-      gem rdoc autobuild
+      rm -rf $GEM_HOME/doc
+      $GEM rdoc autoproj
+      $GEM rdoc autobuild
 
       echo "generating the API documentation from the autoproj packages"
-      autoproj doc
+      autoproj doc --no-color
+      # HACK: remove slam/pcl as we're low on space on the website and it is a
+      # publicly available API documentation. We should have a way to specify a
+      # link in the manifest.xml instead
+      rm -rf install/doc/slam/pcl
       echo "copying API documentation to $api_dir"
       rsync -a --delete install/doc/ $api_dir/
       
-      autoproj_version=`$GEM_HOME/bin/autoproj --version | sed 's/autoproj.*v//'`
+      autoproj_version=`$RUBY -e "require 'autoproj'; puts Autoproj::VERSION"`
       autoproj_api_dir=$GEM_HOME/doc/autoproj-$autoproj_version
       if test -d $autoproj_api_dir; then
           echo "copying autoproj API documentation to $api_dir/autoproj"
@@ -144,7 +209,7 @@ if test "x$DOCGEN" = "xtrue"; then
           echo "could not find the autoproj API in $autoproj_api_dir"
       fi
       
-      autobuild_version=`$GEM_HOME/bin/autobuild --version | sed 's/autobuild.*v//'`
+      autobuild_version=`$RUBY -e "require 'autobuild'; puts Autobuild::VERSION"`
       autobuild_api_dir=$GEM_HOME/doc/autobuild-$autobuild_version
       if test -d $autobuild_api_dir; then
           echo "copying autobuild API documentation to $api_dir/autobuild"
@@ -153,6 +218,7 @@ if test "x$DOCGEN" = "xtrue"; then
           echo "could not find the autobuild API in $autobuild_api_dir"
       fi
     ) > docgen.txt 2>&1
+    echo "Finished documentation generation at `date`"
     touch dev/doc-successful
 fi
 
@@ -175,4 +241,5 @@ if test "x$CLEAN_IF_SUCCESSFUL" = "xtrue"; then
         rsync -a archive_cache/ dev/install/cache/
     fi
 fi
+echo "Done at `date`"
 

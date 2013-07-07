@@ -5,13 +5,14 @@
 # script.
 
 set -x
+export LANG=en_US.UTF-8
 
 export CCACHE_DISABLE=1
 SRC_DIR_WORKSPACE_PREFIX=/home/build/jenkins/workspace
 SRC_DIR_FLAVOR_PREFIX=FLAVOR
 SRC_DIR_SUFFIX=label/DebianUnstable
 LOG_DIR=/home/build/logs
-sudo apt-get install doxygen
+root_dir=$PWD
 
 mkdir -p $LOG_DIR
 result=0
@@ -20,6 +21,20 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
     if ! test -d $workspace_dir/$SRC_DIR_FLAVOR_PREFIX; then
         continue
     fi
+
+    available_flavors=""
+    candidates=`echo $workspace_dir/$SRC_DIR_FLAVOR_PREFIX/* | sort`
+    for flavor_dir in $candidates; do
+        if test -d $flavor_dir/$SRC_DIR_SUFFIX/dev; then
+            flavor_name=`basename $flavor_dir`
+            if test -z "$available_flavors"; then
+                available_flavors="$flavor_name"
+            else
+                available_flavors="$available_flavors,$flavor_name"
+            fi
+        fi
+    done
+    echo "available flavors: $available_flavors"
 
     for flavor_dir in $workspace_dir/$SRC_DIR_FLAVOR_PREFIX/*; do
 	echo
@@ -51,25 +66,44 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 
 	( set -e
 	  cd $path/dev
-          source /home/build/jenkins/workspace/RockIncremental/FLAVOR/master/label/DebianUnstable/dev/env.sh
-          export AUTOPROJ_ROOT_DIR=$PWD
+          # Source here the environment of the flavor-corresponding rock bootstrap - which should be NOT cleaned after 
+          # a successful build, since typelib and other components will be required for the call to rock-directory-pages 
+          if test $workspace_name = "RockBootstrap19"; then
+              ref_install_root=/home/build/jenkins/workspace/RockBootstrap19/FLAVOR/$flavor_name/label/DebianUnstable/dev/
+          else
+              ref_install_root=/home/build/jenkins/workspace/RockIncremental/FLAVOR/$flavor_name/label/DebianUnstable/dev/
+          fi
+          # Install admin_scripts
+          source $ref_install_root/env.sh
+          ( cd $ref_install_root
+              aup base/admin_scripts
+              aup base/doc )
           # Trick autoproj to think that we're setup for the current directory
+          export AUTOPROJ_ROOT_DIR=$PWD
           export GEM_HOME=$PWD/.gems
-          export PATH=/home/build/rock_admin_scripts/bin:$GEM_HOME/bin:$PATH
-          export RUBYLIB=/home/build/rock_admin_scripts/lib:$RUBYLIB
+          # admin_scripts is not part of the layout, it is therefore not
+          # included in env.sh. Add it to our environment
+          export PATH=$ref_install_root/base/admin_scripts/bin:$GEM_HOME/bin:$PATH
+          export RUBYLIB=$ref_install_root/base/admin_scripts/lib:$RUBYLIB
 
-	  gem install webgen coderay PriorityQueue --no-rdoc --no-ri
+	  gem install webgen coderay --no-rdoc --no-ri
 
           tempdir=$(mktemp -d)
-          echo "creating rock's main documentation"
-          cd $tempdir
-          git clone http://git.gitorious.org/rock/doc.git main
+          echo "creating rock's main documentation in $tempdir/main"
+          git clone $ref_install_root/base/doc $tempdir
 
           cd $path/dev
-          rock-directory-pages --status=master:next,next:stable "$tempdir/main/src" $path/doc/api
+          if test "$flavor_name" = "master"; then
+              rock-directory-pages --status=master:next "$tempdir/main/src" $path/doc/api
+          elif test "$flavor_name" = "next"; then
+              rock-directory-pages --status=next:stable "$tempdir/main/src" $path/doc/api
+          else
+              rock-directory-pages "$tempdir/main/src" $path/doc/api
+          fi
 
           cd $tempdir/main
-          webgen
+          webgen --version
+          ROCK_DOC_FLAVORED=$flavor_name:$available_flavors webgen
           echo "moving main documentation in $path/doc"
           mv out/* $path/doc
 
@@ -87,5 +121,6 @@ for workspace_dir in $SRC_DIR_WORKSPACE_PREFIX/*; do
 	set -e
     done
 done
+echo "Result of document generation"
 exit $result
 
