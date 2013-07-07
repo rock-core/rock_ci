@@ -3,6 +3,7 @@
 if test -n "$1"; then
     schroot -c $1 -- $0
 else
+    cd /tmp
     rm -f slave.jar
     wget -N http://localhost:8080/jnlpJars/slave.jar
     java -jar slave.jar
