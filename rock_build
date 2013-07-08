@@ -165,7 +165,7 @@ if ! test -d dev/autoproj; then
     wget $BOOTSTRAP_URL
     mkdir -p dev
     cd dev
-    $RUBY ../$bootstrap_script_name "$@"
+    $RUBY ../$bootstrap_script_name --no-color --no-progress "$@"
 fi
 
 echo "Finished preparing, starting build at `date` with $RUBY"
@@ -174,8 +174,8 @@ echo "Finished preparing, starting build at `date` with $RUBY"
 . ./env.sh
 cp $configfile ./autoproj/config.yml
 
-autoproj update
-autoproj build
+autoproj --no-color --no-progress update
+autoproj --no-color --no-progress build
 touch dev/successful
 
 if test "x$DOCGEN" = "xtrue"; then
