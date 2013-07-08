@@ -155,6 +155,7 @@ fi
 
 export GEM_HOME=$PWD/dev/.gems
 export AUTOPROJ_OSDEPS_MODE
+export AUTOPROJ_BOOTSTRAP_IGNORE_NONEMPTY_DIR=1
 
 # Install yard early, some C++ packages with Ruby bindings will pick it up and
 # use it to generate the Ruby binding documentation
