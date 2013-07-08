@@ -169,19 +169,24 @@ if ! test -d dev/autoproj; then
     rm -f $bootstrap_script_name
     wget $BOOTSTRAP_URL
     mkdir -p dev
-    cd dev
-    $RUBY ../$bootstrap_script_name --no-color --no-progress "$@"
+    ( set -ex
+      cd dev
+      $RUBY ../$bootstrap_script_name --no-color --no-progress "$@"
+    )
 fi
 
 echo "Finished preparing, starting build at `date` with $RUBY"
 
 # We can finally copy the requested config file and build
-. ./env.sh
-cp $configfile ./autoproj/config.yml
-
-autoproj --no-color --no-progress update
-autoproj --no-color --no-progress build
-touch dev/successful
+( set -ex
+  cd dev
+  . ./env.sh
+  cp $configfile ./autoproj/config.yml
+  
+  autoproj --no-color --no-progress update
+  autoproj --no-color --no-progress build
+  touch dev/successful
+)
 
 if test "x$DOCGEN" = "xtrue"; then
     $GEM install hoe coderay rdoc webgen --no-rdoc --no-ri
