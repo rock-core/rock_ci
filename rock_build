@@ -185,7 +185,7 @@ echo "Finished preparing, starting build at `date` with $RUBY"
   
   autoproj --no-color --no-progress update
   autoproj --no-color --no-progress build
-  touch dev/successful
+  touch successful
 )
 
 if test "x$DOCGEN" = "xtrue"; then
