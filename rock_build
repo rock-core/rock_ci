@@ -155,7 +155,7 @@ export GEM_HOME=$PWD/dev/.gems
 # Install yard early, some C++ packages with Ruby bindings will pick it up and
 # use it to generate the Ruby binding documentation
 if test "x$DOCGEN" = "xtrue"; then
-    $GEM install hoe coderay rdoc yard webgen --no-rdoc --no-ri
+    $GEM install rdoc yard --no-rdoc --no-ri
 fi
 
 # If there are no autoproj/ directory, we need to start by bootstrapping
@@ -179,6 +179,8 @@ autoproj build
 touch dev/successful
 
 if test "x$DOCGEN" = "xtrue"; then
+    $GEM install hoe coderay rdoc webgen --no-rdoc --no-ri
+
     echo "Starting documentation generation at `date`"
     api_dir=$PWD/api
     # Only generate the documentation from autoproj. The complete documentation
