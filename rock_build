@@ -44,10 +44,13 @@ echo "$0 started at `date`"
 
 set -ex
 
-config_name=default-master
+
 # The directory in which configuration files are stored
 if test -z "$CONFIG_DIR"; then
     CONFIG_DIR=$(dirname $0)
+fi
+if test -z "$CONFIG_NAME"; then
+    CONFIG_NAME=default-master
 fi
 
 default_config_name=`echo $CONFIG_NAME | sed 's/.*-\(.*\)/default-\1/'`
