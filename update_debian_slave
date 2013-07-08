@@ -3,5 +3,5 @@
 # Script used in a separate jenkins job to update the scripts on each slave
 
 sudo apt-get update
-sudo apt-get -y install wget ruby rubygems doxygen
+sudo apt-get -y install wget ruby rubygems doxygen ruby1.9.1-dev
 
