@@ -4,4 +4,5 @@
 
 sudo apt-get update
 sudo apt-get -y install wget ruby rubygems doxygen ruby1.9.1-dev
+sudo apt-get -y upgrade
 
