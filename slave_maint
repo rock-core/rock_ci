@@ -1,0 +1,5 @@
+#! /bin/sh
+## Perform maintenance tasks on a slave. This does not need to be started often
+# It assumes that workspaces are stored in $JENKINS_ROOT/workspace
+
+find $JENKINS_ROOT/workspace -name '.git' -type d -print -exec git --git-dir={} gc \;
