@@ -1,0 +1,36 @@
+#! /usr/bin/env ruby
+
+LogLine = Struct.new :date, :package, :stage, :duration
+
+parsed = Array.new
+log_content = File.readlines(ARGV.first)
+log_content.each do |line|
+    if line.strip =~ /(\d+(?:-\d+)+ \d+(?::\d+)+\.\d+) (.*) ([^\s]+) (\d+\.\d+)$/
+        date = $1
+        package = $2
+        stage = $3
+        duration = Float($4)
+        parsed << LogLine.new(date, package, stage, duration)
+    end
+end
+
+by_stage = Hash.new(0)
+by_package = Hash.new(0)
+parsed.each do |entry|
+    by_stage[entry.stage] += entry.duration
+    by_package[entry.package] += entry.duration
+end
+
+by_stage.keys.sort.each do |stage|
+    puts "#{stage} #{by_stage[stage]}"
+end
+
+package_sorted_by_duration = by_package.to_a.sort_by(&:last).reverse
+package_sorted_by_duration.delete('autoproj') # this is the osdeps
+total_duration = parsed.inject(0) { |sum, entry| sum + entry.duration }
+cumulative = 0
+package_sorted_by_duration.each do |package, duration|
+    cumulative += duration
+    puts "#{package} #{duration}"
+    break if cumulative > total_duration * 0.5
+end
