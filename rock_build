@@ -96,10 +96,10 @@ if test -z "$MODE"; then
     MODE=auto
 fi
 
-do_incremental=1
-do_full_cleanup=0
-if test "x$INCREMENTAL" = "xtrue" || test "x$MODE" = "xincremental"; then
+if test "x$MODE" = "xincremental"; then
     echo "MODE=incremental, doing an incremental build"
+    do_incremental=1
+    do_full_cleanup=0
 elif test "x$MODE" = "xfull-bootstrap"; then
     echo "MODE=full-bootstrap, doing a full build, including checking out packages"
     do_incremental=0
@@ -110,9 +110,12 @@ elif test "x$MODE" = "xbootstrap"; then
     do_full_cleanup=0
 elif test -d dev && ! test -f dev/successful; then
     echo "last build was unsuccessful, doing an incremental build"
+    do_incremental=1
+    do_full_cleanup=0
 else
     echo "doing a full build"
     do_incremental=0
+    do_full_cleanup=0
 fi
 
 if test "x$do_incremental" = "x1" && test -f dev/cleaned; then
@@ -191,7 +194,7 @@ echo "Finished preparing, starting build at `date` with $RUBY"
 # Delete the stats file if we did not just do a full build
 #
 # Otherwise, generate the consolidated stats file
-if ! test "x$do_incremental" = "x0"; then
+if test "x$do_incremental" = "x1"; then
     rm -f dev/install/log/stats.log
 else
     `dirname $0`/consolidate_autoproj_stats dev/install/stats.log > dev/install/consolidated-stats.log
