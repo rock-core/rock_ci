@@ -197,7 +197,7 @@ echo "Finished preparing, starting build at `date` with $RUBY"
 if test "x$do_incremental" = "x1"; then
     rm -f dev/install/log/stats.log
 else
-    `dirname $0`/consolidate_autoproj_stats dev/install/stats.log > dev/install/consolidated-stats.log
+    `dirname $0`/consolidate_autoproj_stats dev/install/log/stats.log > dev/install/log/consolidated-stats.log
 fi
 
 if test "x$DOCGEN" = "xtrue"; then
