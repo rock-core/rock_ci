@@ -1,4 +1,7 @@
 ROCK_FLAVOR: stable
+GITHUB: git
+GITHUB_ROOT: git://github.com
+GITHUB_PUSH_ROOT: "git@github.com:"
 GITORIOUS: git
 GITORIOUS_ROOT: git://gitorious.org
 GITORIOUS_PUSH_ROOT: "git@gitorious.org:"
