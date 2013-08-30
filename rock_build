@@ -57,7 +57,7 @@ default_config_name=`echo $CONFIG_NAME | sed 's/.*-\(.*\)/default-\1/'`
 
 if test -f $CONFIG_DIR/$CONFIG_NAME.config; then
   . $CONFIG_DIR/$CONFIG_NAME.config
-elif test -f $CONFIG_DIR/default-$job_type.config; then
+elif test -f $CONFIG_DIR/$default_config_name.config; then
   . $CONFIG_DIR/$default_config_name.config
 fi
 
