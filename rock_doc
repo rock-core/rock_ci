@@ -24,14 +24,14 @@ build_dir=$PWD
 
 set -e
 
-if ! test -f doc-successful; then
+if ! test -f dev/doc-successful; then
     echo "last build in $build_dir did not generate documentation, skipping"
     exit 0
 fi
 
 if test "x$FORCE_DOC_GEN" = "xtrue"; then
     rm -f docgen.stamp
-elif test -f docgen.stamp && test docgen.stamp -nt doc-successful; then
+elif test -f docgen.stamp && test docgen.stamp -nt dev/doc-successful; then
     echo "build in $build_dir did not get updated since last time. Skipping ..."
     exit 0
 fi
