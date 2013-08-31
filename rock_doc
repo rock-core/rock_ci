@@ -22,7 +22,7 @@
 
 build_dir=$PWD
 
-set -e
+set -ex
 
 if ! test -f dev/doc-successful; then
     echo "last build in $build_dir did not generate documentation, skipping"
