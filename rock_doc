@@ -59,8 +59,7 @@ fi
 # Install admin_scripts
 source $ref_install_root/env.sh
 ( cd $ref_install_root
-  aup base/admin_scripts
-  aup base/doc )
+  aup --no-color --no-progress base/admin_scripts base/doc)
 # Trick autoproj to think that we're setup for the current directory
 export AUTOPROJ_CURRENT_ROOT=$build_dir/dev
 export PATH=$ref_install_root/base/admin_scripts/bin:$PATH
