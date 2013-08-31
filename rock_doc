@@ -69,7 +69,7 @@ gem install webgen coderay --no-rdoc --no-ri
 
 tempdir=$(mktemp -d)
 echo "creating rock's main documentation in $tempdir/main"
-git clone $ref_install_root/base/doc $tempdir
+git clone $ref_install_root/base/doc $tempdir/main
 
 cd $build_dir/dev
 rock-directory-pages $directory_status "$tempdir/main/src" $build_dir/doc/api
