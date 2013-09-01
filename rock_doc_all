@@ -13,7 +13,14 @@
 #    unset, the documentation will not be "flavored"
 #
 # Its behaviour is modified by the following environment variables:
-#    EXCLUDED_PROJECTS: comma-separated list of projects that should be ignored
+#   EXCLUDED_PROJECTS: comma-separated list of projects that should be ignored
+#   FORCE_DOC_GEN: if true, the documentation will be generated even if
+#     the build did not get updated since the last documentation got
+#     generated. Otherwise, the script will simply return success.
+#     This should be used when the website or one of the documentation
+#     generation scripts got changed
+#   REF_AUTOPROJ_INSTALL: the autoproj installation whose code should be used to
+#     generate documentation. Defaults to the one in $PWD/dev
 
 set -ex
 export LANG=en_US.UTF-8
