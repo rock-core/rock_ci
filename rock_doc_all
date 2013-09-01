@@ -28,7 +28,7 @@ export LANG=en_US.UTF-8
 WORKSPACE_ROOT=$1
 FLAVOR_AXIS=$2
 
-if test -z "$FLAVOR_AXIS"; then
+if test -n "$FLAVOR_AXIS"; then
     roots=`find $WORKSPACE_ROOT -name $FLAVOR_AXIS -type d`
     for root_dir in $roots; do
         project_name=`echo "$root_dir" | sed "s#$WORKSPACE_ROOT/##"`
