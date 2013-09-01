@@ -54,7 +54,9 @@ if test -n "$FLAVOR_NAME"; then
     elif test "$FLAVOR_NAME" = "next"; then
         directory_status="--status=next:stable"
     fi
+    ref_install_root=`echo $ref_install_root | sed "s/FLAVOR_NAME/$FLAVOR_NAME"`
 else
+    ref_install_root=`echo $ref_install_root | sed 's/FLAVOR_NAME/master'`
     unset ROCK_DOC_FLAVORED
 fi
 
