@@ -50,19 +50,20 @@ if test -n "$FLAVOR_AXIS"; then
         echo "$project_name available flavors: $available_flavors"
 
         for flavor_name in $available_flavors; do
-            dev_dir=`find "$root_dir/$flavor_name" -name dev -type d -prune`
-            build_dir=`dirname "$dev_dir"`
+            for dev_dir in `find "$root_dir/$flavor_name" -name dev -type d -prune`; do
+                build_dir=`dirname "$dev_dir"`
 
-            ( cd $build_dir
-               FLAVOR_NAME=$flavor_name AVAILABLE_FLAVORS=$available_flavors `dirname $0`/rock_doc
-            ) >> $build_dir/docgen.txt 2>&1
-            if test "$?" -ne "0"; then
-                echo "generation failed for $dev_dir"
-                echo "log in $project_name-$flavor_name.txt"
-                result=1
-            else
-                touch $build_dir/docgen.stamp
-            fi
+                ( cd $build_dir
+                   FLAVOR_NAME=$flavor_name AVAILABLE_FLAVORS=$available_flavors `dirname $0`/rock_doc
+                ) >> $build_dir/docgen.txt 2>&1
+                if test "$?" -ne "0"; then
+                    echo "generation failed for $dev_dir"
+                    echo "log in $project_name-$flavor_name.txt"
+                    result=1
+                else
+                    touch $build_dir/docgen.stamp
+                fi
+            done
             cp $build_dir/docgen.txt $project_name-$flavor_name.txt
         done
     done
