@@ -61,7 +61,7 @@ source $ref_install_root/env.sh
 ( cd $ref_install_root
   aup --no-color --no-progress base/admin_scripts base/doc)
 # Trick autoproj to think that we're setup for the current directory
-export AUTOPROJ_CURRENT_ROOT=$build_dir/dev
+export AUTOPROJ_CURRENT_ROOT=`grep 'AUTOPROJ_CURRENT_ROOT=' $build_dir/dev/env.sh | sed 's/.*AUTOPROJ_CURRENT_ROOT=//'`
 export PATH=$ref_install_root/base/admin_scripts/bin:$PATH
 export RUBYLIB=$ref_install_root/base/admin_scripts/lib:$RUBYLIB
 
