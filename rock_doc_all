@@ -38,7 +38,7 @@ if test -n "$FLAVOR_AXIS"; then
         fi
         available_flavors=""
         for flavor_dir in $root_dir/*; do
-            if find "$flavor_dir" -path '*/dev/env.sh' -type f -prune; then
+            if find "$flavor_dir" -path '*/dev/env.sh' -type f -prune -o -print; then
                 flavor_name=`basename $flavor_dir`
                 if test -z "$available_flavors"; then
                     available_flavors="$flavor_name"
