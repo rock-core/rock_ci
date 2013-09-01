@@ -29,7 +29,7 @@ WORKSPACE_ROOT=$1
 FLAVOR_AXIS=$2
 
 if test -n "$FLAVOR_AXIS"; then
-    roots=`find $WORKSPACE_ROOT -name $FLAVOR_AXIS -type d`
+    roots=`find $WORKSPACE_ROOT -name $FLAVOR_AXIS -type d -prune`
     for root_dir in $roots; do
         project_name=`echo "$root_dir" | sed "s#$WORKSPACE_ROOT/##"`
         project_name=`echo "$project_name" | sed "s#/.*##"`
@@ -38,7 +38,7 @@ if test -n "$FLAVOR_AXIS"; then
         fi
         available_flavors=""
         for flavor_dir in $root_dir/*; do
-            if find "$flavor_dir" -path dev/env.sh -type f; then
+            if find "$flavor_dir" -path dev/env.sh -type f -prune; then
                 flavor_name=`basename $flavor_dir`
                 if test -z "$available_flavors"; then
                     available_flavors="$flavor_name"
@@ -50,7 +50,7 @@ if test -n "$FLAVOR_AXIS"; then
         echo "$project_name available flavors: $available_flavors"
 
         for flavor_name in $available_flavors; do
-            dev_dir=`find "$root_dir/$flavor_name" -path dev/env.sh -type f`
+            dev_dir=`find "$root_dir/$flavor_name" -path dev/env.sh -type f -prune`
             dev_dir=`dirname "$dev_dir"`
             build_dir=`dirname "$dev_dir"`
 
@@ -68,7 +68,7 @@ if test -n "$FLAVOR_AXIS"; then
         done
     done
 else
-    build_dirs=`find $WORKSPACE_ROOT -path dev/env.sh -type f`
+    build_dirs=`find $WORKSPACE_ROOT -path dev/env.sh -type f -prune`
     for build_dir in $build_dirs; do
         project_name=`echo "$build_dir" | sed "s#$WORKSPACE_ROOT/##"`
         project_name=`echo "$project_name" | sed "s#/.*##"`
