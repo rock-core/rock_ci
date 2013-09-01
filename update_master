@@ -6,3 +6,8 @@ cd $JENKINS_HOME/build_scripts
 git remote update
 git reset --hard origin/master
 
+if test -z "$CONFIG_DIR"; then
+    cd $CONFIG_DIR
+    git remote update
+    git reset --hard origin/master
+fi
