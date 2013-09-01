@@ -38,7 +38,7 @@ if test -n "$FLAVOR_AXIS"; then
         fi
         available_flavors=""
         for flavor_dir in $root_dir/*; do
-            if find "$flavor_dir" -path '*/dev/env.sh' -type f -prune -o -print; then
+            if find "$flavor_dir" -name 'dev' -type d -prune; then
                 flavor_name=`basename $flavor_dir`
                 if test -z "$available_flavors"; then
                     available_flavors="$flavor_name"
@@ -50,8 +50,7 @@ if test -n "$FLAVOR_AXIS"; then
         echo "$project_name available flavors: $available_flavors"
 
         for flavor_name in $available_flavors; do
-            dev_dir=`find "$root_dir/$flavor_name" -path '*/dev/env.sh' -type f -prune`
-            dev_dir=`dirname "$dev_dir"`
+            dev_dir=`find "$root_dir/$flavor_name" -name dev -type d -prune`
             build_dir=`dirname "$dev_dir"`
 
             ( cd $build_dir
@@ -68,9 +67,9 @@ if test -n "$FLAVOR_AXIS"; then
         done
     done
 else
-    build_dirs=`find $WORKSPACE_ROOT -path '*/dev/env.sh' -type f -prune`
-    for build_dir in $build_dirs; do
-        build_dir=`dirname $build_dir`
+    dev_dirs=`find $WORKSPACE_ROOT -name dev -type d -prune`
+    for dev_dir in $dev_dirs; do
+        build_dir=`dirname $dev_dir`
         project_name=`echo "$build_dir" | sed "s#$WORKSPACE_ROOT/##"`
         project_name=`echo "$project_name" | sed "s#/.*##"`
         if echo "$EXCLUDED_PROJECTS" | grep -q "^$project_name$"; then
