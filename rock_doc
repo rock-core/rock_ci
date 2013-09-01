@@ -48,12 +48,14 @@ else
 fi
 
 if test -n "$FLAVOR_NAME"; then
-    rock_doc_flavored=$FLAVOR_NAME:$AVAILABLE_FLAVORS
+    export ROCK_DOC_FLAVORED=$FLAVOR_NAME:$AVAILABLE_FLAVORS
     if test "$FLAVOR_NAME" = "master"; then
         directory_status="--status=master:next"
     elif test "$FLAVOR_NAME" = "next"; then
         directory_status="--status=next:stable"
     fi
+else
+    unset ROCK_DOC_FLAVORED
 fi
 
 # Install admin_scripts
@@ -76,7 +78,7 @@ rock-directory-pages $directory_status "$tempdir/main/src" $build_dir/doc/api
 
 cd $tempdir/main
 webgen --version
-ROCK_DOC_FLAVORED=$rock_doc_flavored webgen
+webgen
 echo "moving main documentation in $build_dir/doc"
 mv out/* $build_dir/doc
 
