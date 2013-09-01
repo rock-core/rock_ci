@@ -43,11 +43,10 @@ if test -n "$FLAVOR_AXIS"; then
                 if test -z "$available_flavors"; then
                     available_flavors="$flavor_name"
                 else
-                    available_flavors="$available_flavors\n$flavor_name"
+                    available_flavors="$available_flavors $flavor_name"
                 fi
             fi
         done
-        available_flavors=`echo "$available_flavors" | sort`
         echo "$project_name available flavors: $available_flavors"
 
         for flavor_name in $available_flavors; do
