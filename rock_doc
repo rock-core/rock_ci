@@ -69,7 +69,8 @@ export AUTOPROJ_CURRENT_ROOT=`grep 'AUTOPROJ_CURRENT_ROOT=' $build_dir/dev/env.s
 export PATH=$ref_install_root/base/admin_scripts/bin:$PATH
 export RUBYLIB=$ref_install_root/base/admin_scripts/lib:$RUBYLIB
 
-gem install webgen coderay --no-rdoc --no-ri
+gem install webgen -v 0.5.17 --no-rdoc --no-ri
+gem install coderay --no-rdoc --no-ri
 
 tempdir=$(mktemp -d)
 echo "creating rock's main documentation in $tempdir/main"
@@ -80,7 +81,7 @@ rock-directory-pages $directory_status "$tempdir/main/src" $build_dir/doc/api
 
 cd $tempdir/main
 webgen --version
-webgen
+webgen _0.5.17_
 echo "moving main documentation in $build_dir/doc"
 mv out/* $build_dir/doc
 
