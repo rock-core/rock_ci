@@ -201,7 +201,8 @@ else
 fi
 
 if test "x$DOCGEN" = "xtrue"; then
-    $GEM install hoe coderay rdoc webgen --no-rdoc --no-ri
+    $GEM install hoe coderay rdoc --no-rdoc --no-ri
+    $GEM install webgen -v 0.5.17 --no-rdoc --no-ri
 
     echo "Starting documentation generation at `date`"
     api_dir=$PWD/api
