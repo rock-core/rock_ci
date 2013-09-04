@@ -58,6 +58,8 @@ if test -n "$FLAVOR_AXIS"; then
                    cd $build_dir
                    FLAVOR_NAME=$flavor_name AVAILABLE_FLAVORS=$available_flavors `dirname $0`/rock_doc
                 ) >> $build_dir/docgen.txt 2>&1
+                set -e
+
                 if test "$?" -ne "0"; then
                     echo "generation failed for $dev_dir"
                     echo "log in $project_name-$flavor_name.txt"
@@ -65,7 +67,6 @@ if test -n "$FLAVOR_AXIS"; then
                 else
                     touch $build_dir/docgen.stamp
                 fi
-                set -e
             done
             cp $build_dir/docgen.txt $project_name-$flavor_name.txt
         done
