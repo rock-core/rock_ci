@@ -48,6 +48,7 @@ if test -n "$FLAVOR_AXIS"; then
             fi
         done
         echo "$project_name available flavors: $available_flavors"
+        export AVAILABLE_FLAVORS=`echo $available_flavors | sed 's/ /,/'`
 
         for flavor_name in $available_flavors; do
             for dev_dir in `find "$root_dir/$flavor_name" -name dev -type d -prune`; do
@@ -56,7 +57,7 @@ if test -n "$FLAVOR_AXIS"; then
                 set +e
                 (
                    cd $build_dir
-                   FLAVOR_NAME=$flavor_name AVAILABLE_FLAVORS=$available_flavors `dirname $0`/rock_doc
+                   FLAVOR_NAME=$flavor_name `dirname $0`/rock_doc
                 ) >> $build_dir/docgen.txt 2>&1
                 set -e
 
