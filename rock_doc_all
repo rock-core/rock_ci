@@ -65,6 +65,7 @@ if test -n "$FLAVOR_AXIS"; then
                     echo "log in $project_name-$flavor_name.txt"
                     result=1
                 else
+                    rsync -a --delete $build_dir/doc/ $project_name/
                     touch $build_dir/docgen.stamp
                 fi
             done
@@ -88,6 +89,7 @@ else
             echo "log in $project_name.txt"
             result=1
         else
+            rsync -a --delete $build_dir/doc/ $project_name/
             touch $build_dir/docgen.stamp
         fi
         cp $build_dir/docgen.txt $project_name.txt
