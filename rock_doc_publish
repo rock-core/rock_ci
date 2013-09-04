@@ -13,6 +13,8 @@
 # where source_dir is one directory relative to SOURCE_DIR
 #   and target_dir where it gets copied in TARGET_DIR
 
+set -ex
+
 # Backup original website directory 
 if test -d $TARGET_DIR; then
     mv $TARGET_DIR $TARGET_DIR-old
