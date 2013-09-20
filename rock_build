@@ -181,7 +181,7 @@ fi
 #additional build flags
 BUILDFLAGS=""
 if ! test -z "$PARALLEL"; then
-    BUILDFLAGS+=" -p $PARALLEL"
+    BUILDFLAGS+=" -p$PARALLEL"
 fi
 
 echo "Finished preparing, starting build at `date` with $RUBY"
