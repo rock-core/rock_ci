@@ -17,7 +17,7 @@ set -ex
 
 # Backup original website directory 
 if test -d $TARGET_DIR; then
-    mv $TARGET_DIR $TARGET_DIR-old
+    rsync -r --delete $TARGET_DIR/ $TARGET_DIR-old/
 fi
 
 if test -n "$TEMPLATE_DIR"; then
@@ -45,13 +45,10 @@ for source in "$@"; do
 
     # Extract documentation and api from each flavor to our 'export' 
     # directory 
-    rsync -r $source_path/ $TARGET_DIR/$target_dir/
+    rsync -r --delete $source_path/ $TARGET_DIR/$target_dir/
 done
 
-# Since we have copied the new documentation, remove the old stuff
-rm -rf $TARGET_DIR-old
-
 # Copy the main documentation first
-( cd www; lftp -c "open $TARGET_URL && mirror -R --exclude api ./ www/" )
-( cd www; lftp -c "open $TARGET_URL && mirror -R --delete ./ www/" )
+( cd www; lftp -c "open $TARGET_URL && debug && mirror -R --exclude api ./ www/" )
+( cd www; lftp -c "open $TARGET_URL && debug && mirror -R --delete ./ www/" )
 
