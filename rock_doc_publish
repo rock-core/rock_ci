@@ -49,6 +49,6 @@ for source in "$@"; do
 done
 
 # Copy the main documentation first
-( cd www; lftp -c "open $TARGET_URL && debug && mirror -R --exclude api ./ www/" )
-( cd www; lftp -c "open $TARGET_URL && debug && mirror -R --delete ./ www/" )
+( cd www; lftp -c "open $TARGET_URL && mirror -R --exclude api ./ www/" )
+( cd www; lftp -c "open $TARGET_URL && mirror -R --delete ./ www/" )
 
