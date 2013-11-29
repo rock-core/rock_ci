@@ -224,6 +224,12 @@ if test "x$DOCGEN" = "xtrue"; then
 
       echo "generating the API documentation from the autoproj packages"
       autoproj doc --no-color
+
+      echo "Generating the model pack"
+      rm -f install/doc/model-pack.tar.bz2
+      if which rock-pack-models > /dev/null 2>&1; then
+          rock-pack-models install/doc/model-pack.tar.bz2
+      fi
       # HACK: remove slam/pcl as we're low on space on the website and it is a
       # publicly available API documentation. We should have a way to specify a
       # link in the manifest.xml instead
