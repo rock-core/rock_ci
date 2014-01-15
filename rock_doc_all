@@ -59,9 +59,10 @@ if test -n "$FLAVOR_AXIS"; then
                    cd $build_dir
                    FLAVOR_NAME=$flavor_name `dirname $0`/rock_doc
                 ) >> $build_dir/docgen.txt 2>&1
+                rock_doc_result=$?
                 set -e
 
-                if test "$?" -ne "0"; then
+                if test "$rock_doc_result" -ne "0"; then
                     echo "generation failed for $dev_dir"
                     echo "log in $project_name-$flavor_name.txt"
                     result=1
@@ -69,7 +70,6 @@ if test -n "$FLAVOR_AXIS"; then
                     if test -d $build_dir/doc; then
                         rsync -a --delete $build_dir/doc/ $project_name-$flavor_name/
                     fi
-                    touch $build_dir/docgen.stamp
                 fi
             done
             cp $build_dir/docgen.txt $project_name-$flavor_name.txt
@@ -84,10 +84,15 @@ else
         if echo "$EXCLUDED_PROJECTS" | grep -q "^$project_name$"; then
             continue
         fi
+
+        set +e
         ( cd $build_dir
            `dirname $0`/rock_doc
         ) >> $build_dir/docgen.txt 2>&1
-        if test "$?" -ne "0"; then
+        rock_doc_result=$?
+        set -e
+
+        if test "$rock_doc_result" -ne "0"; then
             echo "generation failed for $build_dir"
             echo "log in $project_name.txt"
             result=1
@@ -95,7 +100,6 @@ else
             if test -d $build_dir/doc; then
                 rsync -a --delete $build_dir/doc/ $project_name/
             fi
-            touch $build_dir/docgen.stamp
         fi
         cp $build_dir/docgen.txt $project_name.txt
     done

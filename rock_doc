@@ -36,6 +36,8 @@ elif test -f docgen.stamp && test docgen.stamp -nt dev/doc-successful; then
     exit 0
 fi
 
+rm -f docgen.stamp
+
 echo "generating documentation for $build_dir"
 rm -rf doc
 mkdir doc
@@ -87,4 +89,5 @@ mv out/* $build_dir/doc
 
 echo "deleting $tempdir"
 rm -rf $tempdir
+touch $build_dir/docgen.stamp
 
