@@ -3,6 +3,15 @@
 # Script used in a separate jenkins job to update the scripts on each slave
 
 sudo apt-get update
-sudo apt-get -y install wget ruby rubygems doxygen ruby1.9.1-dev
+
+#on debian jessie rubygems is now included in the ruby package
+if cat /etc/*-release | grep jessie > /dev/null; then
+	sudo apt-get -y install wget ruby doxygen ruby1.9.1-dev
+else
+	sudo apt-get -y install wget ruby rubygems doxygen ruby1.9.1-dev
+fi
+
+
+
 sudo apt-get -y upgrade
 
