@@ -39,6 +39,8 @@
 #     rock-robotics.org/autoproj_bootstrap)
 #   AUTOPROJ_OSDEPS_MODE: the mode in which to run the autoproj subsystem
 #     (defaults to 'all')
+#   PARALLEL: set parallel build level to the value of the variable
+#   KEEP_GOING: if set execute autoproj with -k option
 
 echo "$0 started at `date`"
 
@@ -182,6 +184,9 @@ fi
 BUILDFLAGS=""
 if ! test -z "$PARALLEL"; then
     BUILDFLAGS+=" -p$PARALLEL"
+fi
+if ! test -z "$KEEP_GOING"; then
+    BUILDFLAGS+=" -k"
 fi
 
 echo "Finished preparing, starting build at `date` with $RUBY"
