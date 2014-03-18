@@ -185,7 +185,7 @@ BUILDFLAGS=""
 if ! test -z "$PARALLEL"; then
     BUILDFLAGS+=" -p$PARALLEL"
 fi
-if ! test "$KEEP_GOING" = "true" ; then
+if test "$KEEP_GOING" = "true" ; then
     BUILDFLAGS+=" -k"
 fi
 
