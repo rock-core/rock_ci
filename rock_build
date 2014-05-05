@@ -44,8 +44,10 @@
 
 echo "$0 started at `date`"
 
-set -ex
+echo "running on:"
+lsb_release -a
 
+set -ex
 
 # The directory in which configuration files are stored
 if test -z "$CONFIG_DIR"; then
