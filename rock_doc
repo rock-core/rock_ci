@@ -71,9 +71,9 @@ export AUTOPROJ_CURRENT_ROOT=`grep 'AUTOPROJ_CURRENT_ROOT=' $build_dir/dev/env.s
 export PATH=$ref_install_root/base/admin_scripts/bin:$PATH
 export RUBYLIB=$ref_install_root/base/admin_scripts/lib:$RUBYLIB
 
-gem install webgen -v 0.5.17 --no-rdoc --no-ri
-gem install coderay --no-rdoc --no-ri
-gem install qtbindings --no-rdoc --no-ri
+gem1.9.1 install webgen -v 0.5.17 --no-rdoc --no-ri
+gem1.9.1 install coderay --no-rdoc --no-ri
+gem1.9.1 install qtbindings --no-rdoc --no-ri
 
 tempdir=$(mktemp -d)
 echo "creating rock's main documentation in $tempdir/main"
