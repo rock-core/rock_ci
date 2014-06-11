@@ -261,7 +261,7 @@ if test "x$DOCGEN" = "xtrue"; then
       else
           echo "could not find the autobuild API in $autobuild_api_dir"
       fi
-    ) > docgen.txt 2>&1
+    ) 2>&1 | tee docgen.txt
     echo "Finished documentation generation at `date`"
     touch dev/doc-successful
 fi
