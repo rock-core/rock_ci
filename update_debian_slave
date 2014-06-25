@@ -2,7 +2,7 @@
 #
 # Script used in a separate jenkins job to update the scripts on each slave
 
-#sudo apt-get update
+sudo apt-get update
 
 #on debian jessie rubygems is now included in the ruby package
 if cat /etc/*-release | grep jessie > /dev/null || cat /etc/*-release | grep trusty > /dev/null; then
