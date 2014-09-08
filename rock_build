@@ -200,11 +200,14 @@ echo "Finished preparing, starting build at `date` with $RUBY"
   cd dev
   . ./env.sh
   cp $configfile ./autoproj/config.yml
-  
+
+  autoproj --no-color --no-progress update
+
   if ! test -z "$BUILDCONF_BRANCH"; then
     autoproj switch-config branch=$BUILDCONF_BRANCH
+    autoproj --no-color --no-progress update
   fi
-  autoproj --no-color --no-progress update
+  
   autoproj --no-color --no-progress build $BUILDFLAGS
   touch successful
 )
