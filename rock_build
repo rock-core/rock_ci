@@ -41,8 +41,6 @@
 #     (defaults to 'all')
 #   PARALLEL: set parallel build level to the value of the variable
 #   KEEP_GOING: if set execute autoproj with -k option
-#   BUILDCONF_BRANCH: if set after boostrapping, before build switch to this 
-#     banch of the buildconf (/autoproj folder)
 
 echo "$0 started at `date`"
 
@@ -201,9 +199,6 @@ echo "Finished preparing, starting build at `date` with $RUBY"
   . ./env.sh
   cp $configfile ./autoproj/config.yml
   
-  if ! test -z "$BUILDCONF_BRANCH"; then
-    autoproj switch-config branch=$BUILDCONF_BRANCH
-  fi
   autoproj --no-color --no-progress update
   autoproj --no-color --no-progress build $BUILDFLAGS
   touch successful
