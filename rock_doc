@@ -50,12 +50,17 @@ else
 fi
 
 if test -n "$FLAVOR_NAME"; then
-    export ROCK_DOC_FLAVORED=$FLAVOR_NAME:$AVAILABLE_FLAVORS
+    export ROCK_DOC_FLAVORED=$FLAVOR_NAME:$AVAILABLE_FLAVORS:"rock1408"
     if test "$FLAVOR_NAME" = "master"; then
         directory_status="--status=master:next"
     elif test "$FLAVOR_NAME" = "next"; then
         directory_status="--status=next:stable"
     fi
+    if test "$FLAVOR_NAME" = "rock1408"; then
+	export ROCK_DOC_FLAVORED=$FLAVOR_NAME:"master":"next":"stable"
+        directory_status="--status=master:rock1408"
+    fi
+
     ref_install_root=`echo $ref_install_root | sed "s/FLAVOR_NAME/$FLAVOR_NAME/"`
 else
     ref_install_root=`echo $ref_install_root | sed 's/FLAVOR_NAME/master/'`
