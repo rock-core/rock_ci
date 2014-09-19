@@ -38,7 +38,7 @@ if test -n "$FLAVOR_AXIS"; then
         fi
         available_flavors=""
         for flavor_dir in $root_dir/*; do
-            if find "$flavor_dir" -maxdepth 2 -name 'dev' -type d -prune; then
+            if find "$flavor_dir" -maxdepth 3 -name 'dev' -type d -prune; then
                 flavor_name=`basename $flavor_dir`
                 if test -z "$available_flavors"; then
                     available_flavors="$flavor_name"
@@ -51,7 +51,7 @@ if test -n "$FLAVOR_AXIS"; then
         export AVAILABLE_FLAVORS=`echo $available_flavors | sed 's/ /,/g'`
 
         for flavor_name in $available_flavors; do
-            for dev_dir in `find "$root_dir/$flavor_name" -maxdepth 1 -name dev -type d -prune`; do
+            for dev_dir in `find "$root_dir/$flavor_name" -maxdepth 3 -name dev -type d -prune`; do
                 build_dir=`dirname "$dev_dir"`
 
                 set +e
@@ -76,7 +76,7 @@ if test -n "$FLAVOR_AXIS"; then
         done
     done
 else
-    dev_dirs=`find $WORKSPACE_ROOT -maxdepth 2 -name dev -type d -prune`
+    dev_dirs=`find $WORKSPACE_ROOT -maxdepth 3 -name dev -type d -prune`
     for dev_dir in $dev_dirs; do
         build_dir=`dirname $dev_dir`
         project_name=`echo "$build_dir" | sed "s#$WORKSPACE_ROOT/##"`
