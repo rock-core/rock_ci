@@ -73,7 +73,7 @@ export RUBYLIB=$ref_install_root/base/admin_scripts/lib:$RUBYLIB
 
 gem1.9.1 install webgen -v 0.5.17 --no-rdoc --no-ri
 gem1.9.1 install coderay --no-rdoc --no-ri
-#gem1.9.1 install qtbindings --no-rdoc --no-ri
+gem1.9.1 install qtbindings --no-rdoc --no-ri
 
 tempdir=$(mktemp -d)
 echo "creating rock's main documentation in $tempdir/main"
