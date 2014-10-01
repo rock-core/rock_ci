@@ -58,7 +58,7 @@ if test -n "$FLAVOR_AXIS"; then
                 (
                    cd $build_dir
                    FLAVOR_NAME=$flavor_name `dirname $0`/rock_doc
-                ) >> $build_dir/docgen.txt 2>&1
+                ) 2>&1 | tee -a $build_dir/docgen.txt 
                 rock_doc_result=$?
                 set -e
 
