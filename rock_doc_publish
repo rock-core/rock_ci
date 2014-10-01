@@ -53,6 +53,6 @@ chmod u=rwX -R ./
 chmod go=rX -R ./
 
 # Copy the main documentation first
-( cd www; lftp -c "open $TARGET_URL && mirror -v -R --only-newer --parallel=8 --delete ./ www/" )
+( cd www; lftp -c "open $TARGET_URL && mirror -v -R --only-newer --parallel=1 --delete ./ www/" )
 #( cd www; lftp -c "open $TARGET_URL && mirror -R --delete ./ www/" )
 
