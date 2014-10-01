@@ -88,7 +88,7 @@ else
         set +e
         ( cd $build_dir
            `dirname $0`/rock_doc
-        ) >> $build_dir/docgen.txt 2>&1
+        ) 2>&1 | tee -a $build_dir/docgen.txt 
         rock_doc_result=$?
         set -e
 
