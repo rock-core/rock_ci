@@ -1,0 +1,15 @@
+#! /bin/bash
+#   RUBY: full path to the ruby executable to use
+#   GEM: full path to the gem executable to use
+
+echo "$0 started at `date` on `lsb_release -a`"
+set -ex
+
+ROCK_CI_DIR=$(dirname "$0")
+. $ROCK_CI_DIR/rock-ci-shelllib
+
+. ./env.sh
+
+echo "running the tests"
+rock_ci_autoproj test
+

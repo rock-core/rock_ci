@@ -1,0 +1,25 @@
+#! /bin/bash
+#   RUBY: full path to the ruby executable to use
+#   GEM: full path to the gem executable to use
+
+echo "$0 started at `date` on `lsb_release -a`"
+set -ex
+
+ROCK_CI_DIR=$(dirname "$0")
+. $ROCK_CI_DIR/rock-ci-shelllib
+
+api_dir=$1
+
+. ./env.sh
+$GEM install hoe coderay rdoc --no-rdoc --no-ri
+$GEM install webgen -v 0.5.17 --no-rdoc --no-ri
+
+echo "generating the API documentation from the autoproj packages"
+rock_ci_autoproj doc
+
+echo "Generating the model pack"
+rm -f install/doc/model-pack.tar.bz2
+if which rock-pack-models > /dev/null 2>&1; then
+  rock-pack-models install/doc/model-pack.tar.bz2
+fi
+
