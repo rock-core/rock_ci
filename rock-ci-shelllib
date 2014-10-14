@@ -54,7 +54,7 @@ function rock_ci_setupdev {
           $RUBY ../autoproj_bootstrap "$@" --no-color --no-progress 
         )
     fi
-    cp "$configfile" ./autoproj/config.yml
+    cp "$configfile" dev/autoproj/config.yml
 }
 
 function rock_ci_autoproj {
