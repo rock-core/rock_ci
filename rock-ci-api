@@ -6,7 +6,7 @@ echo "$0 started at `date` on `lsb_release -a`"
 set -ex
 
 ROCK_CI_DIR=$(dirname "$0")
-. $ROCK_CI_DIR/rock-ci-shelllib
+. "$ROCK_CI_DIR/rock-ci-shelllib"
 
 api_dir=$1
 

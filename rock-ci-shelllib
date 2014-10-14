@@ -13,22 +13,22 @@ function rock_ci_setdefaults {
         CONFIG_NAME=default-master
     fi
 
-    default_config_name=`echo $CONFIG_NAME | sed 's/.*-\(.*\)/default-\1/'`
+    default_config_name=`echo "$CONFIG_NAME" | sed 's/.*-\(.*\)/default-\1/'`
 
-    if test -f $CONFIG_DIR/$CONFIG_NAME.config; then
-      . $CONFIG_DIR/$CONFIG_NAME.config
-    elif test -f $CONFIG_DIR/$default_config_name.config; then
-      . $CONFIG_DIR/$default_config_name.config
+    if test -f "$CONFIG_DIR/$CONFIG_NAME.config"; then
+      . "$CONFIG_DIR/$CONFIG_NAME.config"
+    elif test -f "$CONFIG_DIR/$default_config_name.config"; then
+      . "$CONFIG_DIR/$default_config_name.config"
     fi
 
-    if test -f $CONFIG_DIR/$CONFIG_NAME.yml; then
-        configfile=$CONFIG_DIR/$CONFIG_NAME.yml
+    if test -f "$CONFIG_DIR/$CONFIG_NAME.yml"; then
+        configfile="$CONFIG_DIR/$CONFIG_NAME.yml"
     else
-        configfile=$CONFIG_DIR/$default_config_name.yml
+        configfile="$CONFIG_DIR/$default_config_name.yml"
     fi
 
     if test -z "$BOOTSTRAP_URL"; then
-        BOOTSTRAP_URL=$DEFAULT_BOOTSTRAP_URL
+        BOOTSTRAP_URL="$DEFAULT_BOOTSTRAP_URL"
     fi
 
     if test -z "$AUTOPROJ_OSDEPS_MODE"; then
@@ -36,10 +36,10 @@ function rock_ci_setdefaults {
     fi
 
     if test -z "$RUBY"; then
-        RUBY=$DEFAULT_RUBY
+        RUBY="$DEFAULT_RUBY"
     fi
     if test -z "$GEM"; then
-        GEM=$DEFAULT_GEM
+        GEM="$DEFAULT_GEM"
     fi
 }
 
@@ -54,7 +54,7 @@ function rock_ci_setupdev {
           $RUBY ../autoproj_bootstrap "$@" --no-color --no-progress 
         )
     fi
-    cp $configfile ./autoproj/config.yml
+    cp "$configfile" ./autoproj/config.yml
 }
 
 function rock_ci_autoproj {

@@ -44,7 +44,7 @@ echo "$0 started at `date` on `lsb_release -a`"
 set -ex
 
 ROCK_CI_DIR=$(dirname "$0")
-. $ROCK_CI_DIR/rock-ci-shelllib
+. "$ROCK_CI_DIR/rock-ci-shelllib"
 
 rock_ci_setdefaults
 
@@ -110,7 +110,7 @@ fi
 # Otherwise, it would not get updated
 rm -rf dev/autoproj dev/.remotes
 
-export GEM_HOME=$PWD/dev/.gems
+export GEM_HOME="$PWD/dev/.gems"
 
 # Install yard early, some C++ packages with Ruby bindings will pick it up and
 # use it to generate the Ruby binding documentation
@@ -141,16 +141,16 @@ touch successful
 if test "x$do_incremental" = "x1"; then
     rm -f dev/install/log/stats.log
 else
-    $ROCK_CI_DIR/rock-ci-process-stats dev/install/log/stats.log \
+    "$ROCK_CI_DIR/rock-ci-process-stats" dev/install/log/stats.log \
         > dev/install/log/consolidated-stats.log
 fi
 
 if test "x$DOCGEN" = "xtrue"; then
     echo "Starting documentation generation at `date`"
     ( cd dev
-      rock-ci-api $PWD/api ) 2>&1 | tee docgen.txt
+      rock-ci-api "$PWD/api" ) 2>&1 | tee docgen.txt
     echo "copying API documentation to $api_dir"
-    rsync -a --delete dev/install/doc/ $api_dir/
+    rsync -a --delete dev/install/doc/ "$api_dir/"
     echo "Finished documentation generation at `date`"
     touch dev/doc-successful
 fi

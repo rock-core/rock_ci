@@ -34,7 +34,7 @@ echo "$0 started at `date` on `lsb_release -a`"
 set -ex
 
 ROCK_CI_DIR=$(dirname $0)
-. $ROCK_CI_DIR/rock-ci-shelllib
+. "$ROCK_CI_DIR/rock-ci-shelllib"
 
 rock_ci_setdefaults
 
@@ -44,7 +44,7 @@ if test -z "$AUTOBUILD_CACHE_DIR"; then
 fi
 
 if test "x$MODE" = "xfull"; then
-    rm -rf $AUTOBUILD_CACHE_DIR
+    rm -rf "$AUTOBUILD_CACHE_DIR"
 fi
 
 export AUTOPROJ_OSDEPS_MODE
@@ -57,6 +57,5 @@ fi
 # If there are no autoproj/ directory, we need to start by bootstrapping
 rock_ci_setupdev "$@"
 echo "Finished preparing, starting build at `date` with $RUBY"
-rock_ci_autoproj cache $AUTOPROJ_OPTIONS $AUTOBUILD_CACHE_DIR
-
+rock_ci_autoproj cache $AUTOPROJ_OPTIONS "$AUTOBUILD_CACHE_DIR"
 

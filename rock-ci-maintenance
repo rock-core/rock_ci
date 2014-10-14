@@ -5,19 +5,19 @@
 SCRIPT_URL=git://github.com/rock-core/rock_ci
 CONFIG_URL=git://github.com/rock-core/rock_ci_conf
 
-if ! test -d $SCRIPT_DIR; then
-    git clone $SCRIPT_URL $SCRIPT_DIR
+if ! test -d "$SCRIPT_DIR"; then
+    git clone "$SCRIPT_URL" "$SCRIPT_DIR"
 else
-    cd $SCRIPT_DIR
+    cd "$SCRIPT_DIR"
     git remote update
     git reset --hard origin/master
 fi
 
 if test -z "$CONFIG_DIR"; then
-    if ! test -d $CONFIG_DIR; then
-        git clone $CONFIG_URL $CONFIG_DIR
+    if ! test -d "$CONFIG_DIR"; then
+        git clone "$CONFIG_URL" "$CONFIG_DIR"
     else
-        cd $CONFIG_DIR
+        cd "$CONFIG_DIR"
         git remote update
         git reset --hard origin/master
     fi
