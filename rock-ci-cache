@@ -9,8 +9,6 @@
 # the description of these two variables for more information)
 #
 #   AUTOBUILD_CACHE_DIR: the full path to the cache directory
-#   SKIP_SUCCESSFUL: if set to true, any build show last result was successful
-#                    is ignored. The default is false.
 #   MODE:
 #       full: create the cache from scratch
 #       incremental: update the current cache
@@ -31,7 +29,6 @@
 #     rock-robotics.org/autoproj_bootstrap)
 #   AUTOPROJ_OPTIONS: additional options that should be passed to autoproj for
 #     the main build. The options given to the script are bootstrap options
-#   PARALLEL: set parallel build level to the value of the variable
 
 echo "$0 started at `date` on `lsb_release -a`"
 set -ex
