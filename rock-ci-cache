@@ -55,7 +55,7 @@ if test -n "$PARALLEL"; then
 fi
 
 # If there are no autoproj/ directory, we need to start by bootstrapping
-rock_ci_setupdev
+rock_ci_setupdev "$@"
 echo "Finished preparing, starting build at `date` with $RUBY"
 rock_ci_autoproj cache $AUTOPROJ_OPTIONS $AUTOBUILD_CACHE_DIR
 
