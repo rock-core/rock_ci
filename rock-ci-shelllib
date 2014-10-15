@@ -61,7 +61,7 @@ function rock_ci_autoproj {
     ( set -ex
       cd dev
       . ./env.sh
-      autoproj --no-color --no-progress "$@"
+      autoproj "$@" --no-color --no-progress
     )
 }
 
