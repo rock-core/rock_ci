@@ -55,6 +55,8 @@ function rock_ci_setupdev {
         )
     fi
     cp "$configfile" dev/autoproj/config.yml
+    # This also updates the autoproj/autobuild gems
+    rock_ci_autoproj update-config
 }
 
 function rock_ci_autoproj {
