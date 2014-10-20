@@ -1,44 +1,14 @@
 #! /bin/bash
 #
-# Main build script in all build server jobs
+# Main build script
 #
-# All arguments are passed to the autoproj_bootstrap script
+# All script arguments are passed to the autoproj_bootstrap script
 #
-# Control environment variables. All of these except CONFIG_DIR and CONFIG_NAME
-# can be set by creating a $CONFIG_NAME.config shell file in $CONFIG_DIR (see
-# the description of these two variables for more information)
+# See README.txt for a description of all the environment variables that can be
+# used to customize its behaviour.
 #
-#   SKIP_SUCCESSFUL: if set to true, any build show last result was successful
-#                    is ignored. The default is false.
-#   MODE:
-#       full-bootstrap: remove the complete dev/ directory and bootstrap fresh
-#       bootstrap: keep the currently checked out code in dev/. Just delete all
-#                  build byproducts, gems and autoproj configuration
-#       incremental: builds from the current state of dev/. If the build has
-#                    been cleaned last time, the job is ignored
-#       auto: do a bootstrap if dev/ is clean and otherwise do an incremental
-#             build
-#
-#   DOCGEN: if set to true, the API documentation is generated
-#
-#   CONFIG_DIR: directory where configuration files are stored. For each given
-#     config name (see CONFIG_NAME below), a $CONFIG_NAME.config file is sourced
-#     at the beginning of this shell script if it exists, and a $CONFIG_NAME.yml
-#     file is used as the autoproj configuration file. It defaults to the
-#     directory containing this script.
-#   CONFIG_NAME: the name of the files to look for when loading configuration.
-#     If the configuration files cannot be found, the corresponding default
-#     config is searched as well. The default config name is obtained by
-#     replacing the part before the first dash by "default". For instance
-#     rock-master becomes default-master
-#   RUBY: full path to the ruby executable to use
-#   GEM: full path to the gem executable to use
-#   BOOTSTRAP_URL: path to the autoproj bootstrap script to run (defaults to
-#     rock-robotics.org/autoproj_bootstrap)
-#   AUTOPROJ_OSDEPS_MODE: the mode in which to run the autoproj subsystem
-#     (defaults to 'all')
-#   PARALLEL: set parallel build level to the value of the variable
-#   KEEP_GOING: if set execute autoproj with -k option
+#   ROCK_CI_SKIP_SUCCESSFUL: if set to true, any build whose last result was
+#     successful is ignored. The default is false.
 
 echo "$0 started at `date` on `lsb_release -a`"
 set -ex
@@ -48,15 +18,9 @@ ROCK_CI_DIR=$(dirname "$0")
 
 rock_ci_setdefaults
 
-if test "x$SKIP_SUCCESSFUL" = "xtrue" && test -d dev; then
-    if test -f dev/successful; then
-        if test "x$DOCGEN" != "xtrue" || test -f dev/doc-successful; then
-            echo "last build was successful and SKIP_SUCCESSFUL is set, doing nothing"
-            exit 0
-        else
-            MODE=incremental
-        fi
-    fi
+if test "x$ROCK_CI_SKIP_SUCCESSFUL" = "xtrue" && test -f dev/build-successful; then
+    echo "last build was successful and SKIP_SUCCESSFUL is set, doing nothing"
+    exit 0
 fi
 
 if test -z "$MODE"; then

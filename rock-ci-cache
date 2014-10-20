@@ -1,34 +1,14 @@
 #! /bin/bash
 #
-# Main build script in all build server jobs
+# Creates an autobuild cache to speedup bootstraps
 #
-# All arguments are passed to the autoproj_bootstrap script
+# All script arguments are passed to the autoproj_bootstrap script
 #
-# Control environment variables. All of these except CONFIG_DIR and CONFIG_NAME
-# can be set by creating a $CONFIG_NAME.config shell file in $CONFIG_DIR (see
-# the description of these two variables for more information)
+# See README.txt for a description of all the environment variables that can be
+# used to customize its behaviour.
 #
-#   AUTOBUILD_CACHE_DIR: the full path to the cache directory
-#   MODE:
-#       full: create the cache from scratch
-#       incremental: update the current cache
-#
-#   CONFIG_DIR: directory where configuration files are stored. For each given
-#     config name (see CONFIG_NAME below), a $CONFIG_NAME.config file is sourced
-#     at the beginning of this shell script if it exists, and a $CONFIG_NAME.yml
-#     file is used as the autoproj configuration file. It defaults to the
-#     directory containing this script.
-#   CONFIG_NAME: the name of the files to look for when loading configuration.
-#     If the configuration files cannot be found, the corresponding default
-#     config is searched as well. The default config name is obtained by
-#     replacing the part before the first dash by "default". For instance
-#     rock-master becomes default-master
-#   RUBY: full path to the ruby executable to use
-#   GEM: full path to the gem executable to use
-#   BOOTSTRAP_URL: path to the autoproj bootstrap script to run (defaults to
-#     rock-robotics.org/autoproj_bootstrap)
-#   AUTOPROJ_OPTIONS: additional options that should be passed to autoproj for
-#     the main build. The options given to the script are bootstrap options
+# See README.txt for a description of all the environment variables that can be
+# used to customize its behaviour.
 
 echo "$0 started at `date` on `lsb_release -a`"
 set -ex
@@ -38,24 +18,17 @@ ROCK_CI_DIR=$(dirname $0)
 
 rock_ci_setdefaults
 
-if test -z "$AUTOBUILD_CACHE_DIR"; then
-    echo "the AUTOBUILD_CACHE_DIR environment variable must be set"
+if test -z "$ROCK_CI_AUTOBUILD_CACHE_DIR"; then
+    echo "the ROCK_CI_AUTOBUILD_CACHE_DIR environment variable must be set"
     exit 1
 fi
 
-if test "x$MODE" = "xfull"; then
-    rm -rf "$AUTOBUILD_CACHE_DIR"
-fi
-
-export AUTOPROJ_OSDEPS_MODE
-export AUTOPROJ_BOOTSTRAP_IGNORE_NONEMPTY_DIR=1
-
-if test -n "$PARALLEL"; then
-    autoproj_options="$autoproj_options -p$PARALLEL"
+if test "x$ROCK_CI_MODE" = "xfull"; then
+    rm -rf "$ROCK_CI_AUTOBUILD_CACHE_DIR"
 fi
 
 # If there are no autoproj/ directory, we need to start by bootstrapping
 rock_ci_setupdev "$@"
-echo "Finished preparing, starting build at `date` with $RUBY"
-rock_ci_autoproj cache $AUTOPROJ_OPTIONS "$AUTOBUILD_CACHE_DIR"
+echo "Finished preparing, starting build at `date` with $ROCK_CI_RUBY"
+rock_ci_autoproj cache $ROCK_CI_AUTOPROJ_OPTIONS "$ROCK_CI_AUTOBUILD_CACHE_DIR"
 
