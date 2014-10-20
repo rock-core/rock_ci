@@ -67,7 +67,7 @@ if test "x$do_incremental" = "x0"; then
     fi
 fi
 
-rock_ci_setupdev
+rock_ci_setupdev "$@"
 
 export GEM_HOME="$PWD/dev/.gems"
 $ROCK_CI_GEM install rdoc yard --no-rdoc --no-ri
