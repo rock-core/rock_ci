@@ -24,7 +24,7 @@ if which apt-get 2>&1; then
     sudo apt-get update
     sudo apt-get -y install wget ruby1.9.1
     sudo apt-get -y upgrade
-    if test -n "$apt_cache_dir"; then
+    if test -n "$ROCK_CI_PACKAGE_CACHE"; then
         sudo rsync -a /var/cache/apt/archives/ "$ROCK_CI_PACKAGE_CACHE/"
         sudo chown -R ubuntu:ubuntu "$ROCK_CI_PACKAGE_CACHE/"
     fi
