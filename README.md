@@ -46,6 +46,8 @@ __ROCK_CI_MODE__: in general, controls whether the CI operation should be done
 from scratch or incrementally (when applicable). The exact behaviours and
 choices is dependent on the exact script being executed:
 
+__ROCK_CI_AUTOPROJ_OPTIONS__: additional options that should be passed to autoproj (e.g. -k)
+
 _for rock-ci-cache_:
 ```
 ROCK_CI_MODE:
