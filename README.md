@@ -1,8 +1,13 @@
 This is a collection of script that can be used to automate Rock builds and
 associated tasks. It is meant for continuous integration in e.g. Jenkins
 
-Common environment variables
-----------------------------
+Configuration variables
+-----------------------
+This is a list of the available variables that can be set to affect the behaviour
+of the CI scripts. They can either be passed as environment variables (e.g. by
+adding them as parameters to a Jenkins build) or set within the .config configuration
+file (see the ROCK_CI_CONFIG_NAME variable below)
+
 __ROCK_CI_CONFIG_NAME__: the name of the files to look for when loading
 configuration (see also ROCK_CI_CONFIG_DIR below). The CI scripts load two
 configuration files. The $ROCK_CI_CONFIG_NAME.config file is a shell script that
