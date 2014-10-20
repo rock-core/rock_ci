@@ -39,7 +39,7 @@ elif test "x$MODE" = "xbootstrap"; then
     echo "MODE=bootstrap, doing a full build but not checking out packages again. Use full-bootstrap for that"
     do_incremental=0
     do_full_cleanup=0
-elif test -d dev && ! test -f dev/successful; then
+elif ! test -f dev/build-successful; then
     echo "last build was unsuccessful, doing an incremental build"
     do_incremental=1
     do_full_cleanup=0
@@ -49,16 +49,13 @@ else
     do_full_cleanup=0
 fi
 
-if test "x$do_incremental" = "x1" && test -f dev/cleaned; then
+if test "x$do_incremental" = "x1" && test -f dev/build-cleaned; then
     echo "this is an incremental build, but the last build got cleaned, doing nothing"
     exit 0
 fi
 
-rm -f dev/successful
-rm -f dev/doc-successful
-rm -f dev/cleaned
-rm -f docgen.txt
-rm -rf api
+rm -f dev/build-successful
+rm -f dev/build-cleaned
 
 if test "x$do_incremental" = "x0"; then
     if test "x$do_full_cleanup" = "x1"; then
@@ -70,34 +67,17 @@ if test "x$do_incremental" = "x0"; then
     fi
 fi
 
-# Always delete autoproj's configuration directory so that we always start fresh
-# Otherwise, it would not get updated
-rm -rf dev/autoproj dev/.remotes
-
-export GEM_HOME="$PWD/dev/.gems"
-
-# Install yard early, some C++ packages with Ruby bindings will pick it up and
-# use it to generate the Ruby binding documentation
-if test "x$DOCGEN" = "xtrue"; then
-    $GEM install rdoc yard --no-rdoc --no-ri
-fi
-
 rock_ci_setupdev
 
-#additional build flags
-if ! test -z "$PARALLEL"; then
-    AUTOPROJ_OPTIONS="$AUTOPROJ_OPTIONS -p$PARALLEL"
-fi
-if test "$KEEP_GOING" = "true" ; then
-    AUTOPROJ_OPTIONS="$AUTOPROJ_OPTIONS -k"
-fi
+export GEM_HOME="$PWD/dev/.gems"
+$ROCK_CI_GEM install rdoc yard --no-rdoc --no-ri
 
-echo "Finished preparing, starting build at `date` with $RUBY"
+echo "Finished preparing, starting build at `date` with $ROCK_CI_RUBY"
 
 # We can finally copy the requested config file and build
-rock_ci_autoproj $AUTOPROJ_OPTIONS update
-rock_ci_autoproj $AUTOPROJ_OPTIONS build
-touch successful
+rock_ci_autoproj $ROCK_CI_AUTOPROJ_OPTIONS update
+rock_ci_autoproj $ROCK_CI_AUTOPROJ_OPTIONS build
+touch build-successful
 
 # Delete the stats file if we did not just do a full build
 #
@@ -109,20 +89,8 @@ else
         > dev/install/log/consolidated-stats.log
 fi
 
-if test "x$DOCGEN" = "xtrue"; then
-    echo "Starting documentation generation at `date`"
-    ( cd dev
-      rock-ci-api "$PWD/api" ) 2>&1 | tee docgen.txt
-    echo "copying API documentation to $api_dir"
-    rsync -a --delete dev/install/doc/ "$api_dir/"
-    echo "Finished documentation generation at `date`"
-    touch dev/doc-successful
-fi
-
-# Save the logs AFTER documentation generation, so that they include docgen logs
-# as well
-mkdir -p logs
-cp -r dev/install/log logs/`date +%F-%H%M%S`
+mkdir -p logs/build/
+cp -r dev/install/log logs/build/`date +%F-%H%M%S`
 
 echo "Done at `date`"
 
