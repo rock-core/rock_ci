@@ -2,14 +2,17 @@
 #
 # Updates the infrastructure and packages for supported OSes
 
+# Update the script itself
 SCRIPT_URL=git://github.com/rock-core/rock_ci
-
-if ! test -d "$ROCK_CI_SCRIPT_DIR"; then
-    git clone "$SCRIPT_URL" "$ROCK_CI_SCRIPT_DIR"
-else
-    cd "$ROCK_CI_SCRIPT_DIR"
-    git remote update
-    git reset --hard origin/master
+cd "$ROCK_CI_DIR"
+cur_id=$(git rev-parse HEAD)
+git remote rm origin
+git remote add -f origin "$SCRIPT_URL"
+git remote update
+git reset --hard origin/master
+new_id=$(git rev-parse HEAD)
+if test "x$cur_id" != "x$new_id"; then
+    exec "$0" "$@"
 fi
 
 if which apt-get 2>&1; then
