@@ -2,6 +2,17 @@
 #
 # Updates the infrastructure and packages for supported OSes
 
+# Install git
+if which apt-get 2>&1; then
+    if test -n "$ROCK_CI_PACKAGE_CACHE"; then
+        mkdir -p "$ROCK_CI_PACKAGE_CACHE"
+        sudo rsync -a "$ROCK_CI_PACKAGE_CACHE/" /var/cache/apt/archives/
+    fi
+    sudo apt-get update
+    sudo apt-get -y upgrade
+    sudo apt-get -y install git
+fi
+
 # Update the script itself
 SCRIPT_URL=git://github.com/rock-core/rock_ci
 cd "$ROCK_CI_DIR"
@@ -16,14 +27,7 @@ if test "x$cur_id" != "x$new_id"; then
 fi
 
 if which apt-get 2>&1; then
-    if test -n "$ROCK_CI_PACKAGE_CACHE"; then
-        mkdir -p "$ROCK_CI_PACKAGE_CACHE"
-        sudo rsync -a "$ROCK_CI_PACKAGE_CACHE/" /var/cache/apt/archives/
-    fi
-
-    sudo apt-get update
     sudo apt-get -y install wget ruby1.9.1
-    sudo apt-get -y upgrade
     if test -n "$ROCK_CI_PACKAGE_CACHE"; then
         sudo rsync -a /var/cache/apt/archives/ "$ROCK_CI_PACKAGE_CACHE/"
         sudo chown -R ubuntu:ubuntu "$ROCK_CI_PACKAGE_CACHE/"
