@@ -46,6 +46,13 @@ __ROCK_CI_MODE__: in general, controls whether the CI operation should be done
 from scratch or incrementally (when applicable). The exact behaviours and
 choices is dependent on the exact script being executed:
 
+_for rock-ci-cache_:
+```
+ROCK_CI_MODE:
+    full: delete the current cache and start caching
+    incremental: update the current cache if there is one, and create one if it does not (default)
+```
+
 _for rock-ci-build_:
 ```
 ROCK_CI_MODE:
@@ -55,7 +62,7 @@ ROCK_CI_MODE:
     incremental: builds from the current state of dev/. If the build has
                  been cleaned last time, the job is ignored
     auto: do a bootstrap if the last buil was successful and otherwise do an
-          incremental build
+          incremental build (default)
 ```
 
 Setting up the autobuild cache
