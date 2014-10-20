@@ -7,7 +7,7 @@ DEFAULT_BOOTSTRAP_URL=http://rock-robotics.org/stable/autoproj_bootstrap
 function rock_ci_setdefaults {
     # The directory in which configuration files are stored
     if test -z "$ROCK_CI_CONFIG_DIR"; then
-        ROCK_CI_CONFIG_DIR=$(dirname $0)
+        ROCK_CI_CONFIG_DIR=$(dirname $0)/conf
     fi
     if test -z "$ROCK_CI_CONFIG_NAME"; then
         ROCK_CI_CONFIG_NAME=default-master
