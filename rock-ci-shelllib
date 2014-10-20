@@ -51,6 +51,7 @@ function rock_ci_setupdev {
     rm -f autoproj_bootstrap
     wget $ROCK_CI_AUTOPROJ_BOOTSTRAP_URL -O autoproj_bootstrap
     mkdir -p dev
+    rm -rf dev/autoproj
     ( set -ex
       cd dev
       export AUTOPROJ_OSDEPS_MODE=$ROCK_CI_AUTOPROJ_OSDEPS_MODE
