@@ -41,10 +41,6 @@ function rock_ci_setdefaults {
     if test -z "$ROCK_CI_GEM"; then
         ROCK_CI_GEM="$DEFAULT_GEM"
     fi
-
-    if test -n "$ROCK_CI_PARALLEL"; then
-        ROCK_CI_AUTOPROJ_OPTIONS="$ROCK_CI_AUTOPROJ_OPTIONS -p$PARALLEL"
-    fi
 }
 
 function rock_ci_setupdev {

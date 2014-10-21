@@ -38,15 +38,11 @@ binary for ruby 1.9.3)
 __ROCK_CI_AUTOPROJ_OSDEPS_MODE__: the mode in which to run the autoproj subsystem
 (defaults to 'all')
 
-__ROCK_CI_PARALLEL__: set parallel build level to the value of the variable.  This
-is used to override the autobuild autodetection mechanisms if you build using
-distributed servers (distcc, icecc)
-
 __ROCK_CI_MODE__: in general, controls whether the CI operation should be done
 from scratch or incrementally (when applicable). The exact behaviours and
 choices is dependent on the exact script being executed:
 
-__ROCK_CI_AUTOPROJ_OPTIONS__: additional options that should be passed to autoproj (e.g. -k)
+__ROCK_CI_AUTOPROJ_OPTIONS__: additional options that should be passed to autoproj (e.g. -k or -p)
 
 _for rock-ci-cache_:
 ```
