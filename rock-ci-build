@@ -23,20 +23,20 @@ if test "x$ROCK_CI_SKIP_SUCCESSFUL" = "xtrue" && test -f dev/build-successful; t
     exit 0
 fi
 
-if test -z "$MODE"; then
-    MODE=auto
+if test -z "$ROCK_CI_MODE"; then
+    ROCK_CI_MODE=auto
 fi
 
-if test "x$MODE" = "xincremental"; then
-    echo "MODE=incremental, doing an incremental build"
+if test "x$ROCK_CI_MODE" = "xincremental"; then
+    echo "ROCK_CI_MODE=incremental, doing an incremental build"
     do_incremental=1
     do_full_cleanup=0
-elif test "x$MODE" = "xfull-bootstrap"; then
-    echo "MODE=full-bootstrap, doing a full build, including checking out packages"
+elif test "x$ROCK_CI_MODE" = "xfull-bootstrap"; then
+    echo "ROCK_CI_MODE=full-bootstrap, doing a full build, including checking out packages"
     do_incremental=0
     do_full_cleanup=1
-elif test "x$MODE" = "xbootstrap"; then
-    echo "MODE=bootstrap, doing a full build but not checking out packages again. Use full-bootstrap for that"
+elif test "x$ROCK_CI_MODE" = "xbootstrap"; then
+    echo "ROCK_CI_MODE=bootstrap, doing a full build but not checking out packages again. Use full-bootstrap for that"
     do_incremental=0
     do_full_cleanup=0
 elif ! test -f dev/build-successful; then
