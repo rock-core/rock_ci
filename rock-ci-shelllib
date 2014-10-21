@@ -67,6 +67,8 @@ function rock_ci_autoproj {
     ( set -ex
       cd dev
       . ./env.sh
+      export AUTOPROJ_OSDEPS_MODE=$ROCK_CI_AUTOPROJ_OSDEPS_MODE
+      export AUTOBUILD_CACHE_DIR=$ROCK_CI_AUTOBUILD_CACHE_DIR
       $ROCK_CI_RUBY -S autoproj "$@" --no-color --no-progress
     )
 }
